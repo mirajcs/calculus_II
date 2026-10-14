@@ -10,8 +10,8 @@ website:
   title: "Calculus II"
   navbar:
     left:
-      - href: index.qmd
-        text: Home
+      #- href: index.qmd
+      #  text: Home
       - text: "Ch 7: Techniques of Integration"
         menu:
           - href: integration_table.ipynb
