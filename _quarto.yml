@@ -1,0 +1,39 @@
+project:
+  type: website
+  output-dir: _site
+  render:
+    - index.qmd
+    - integration_table.ipynb
+    - integration_by_parts.ipynb
+
+website:
+  title: "Calculus II"
+  navbar:
+    left:
+      - href: index.qmd
+        text: Home
+      - text: "Ch 7: Techniques of Integration"
+        menu:
+          - href: integration_table.ipynb
+            text: Integration Rules
+          - href: integration_by_parts.ipynb
+            text: "7.1 Integration by Parts"
+  sidebar:
+    style: docked
+    contents:
+      - href: index.qmd
+        text: Home
+      - section: "Chapter 7: Techniques of Integration"
+        contents:
+          - href: integration_table.ipynb
+            text: Integration Rules
+          - href: integration_by_parts.ipynb
+            text: "7.1 Integration by Parts"
+
+format:
+  html:
+    toc: true
+    code-fold: show
+
+execute:
+  freeze: auto   # reuse saved results instead of re-running code on every render
