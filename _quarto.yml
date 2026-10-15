@@ -5,6 +5,7 @@ project:
     - index.qmd
     - integration_table.ipynb
     - integration_by_parts.ipynb
+    - trigonometric_integrals.ipynb
 
 website:
   title: "Calculus II"
@@ -18,6 +19,8 @@ website:
             text: Integration Rules
           - href: integration_by_parts.ipynb
             text: "7.1 Integration by Parts"
+          - href: trigonometric_integrals.ipynb
+            text: "7.2 Trigonometric Integrals"
   sidebar:
     style: docked
     contents:
@@ -29,6 +32,8 @@ website:
             text: Integration Rules
           - href: integration_by_parts.ipynb
             text: "7.1 Integration by Parts"
+          - href: trigonometric_integrals.ipynb
+            text: "7.2 Trigonometric Integrals"
 
 format:
   html:
