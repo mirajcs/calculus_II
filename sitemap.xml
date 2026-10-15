@@ -1,15 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
   <url>
-    <loc>https://mirajcs.github.io/calculus_II/integration_by_parts.html</loc>
-    <lastmod>2026-10-14T01:21:08.040Z</lastmod>
-  </url>
-  <url>
-    <loc>https://mirajcs.github.io/calculus_II/index.html</loc>
-    <lastmod>2026-10-14T01:21:08.040Z</lastmod>
+    <loc>https://mirajcs.github.io/calculus_II/trigonometric_integrals.html</loc>
+    <lastmod>2026-10-15T13:42:51.581Z</lastmod>
   </url>
   <url>
     <loc>https://mirajcs.github.io/calculus_II/integration_table.html</loc>
-    <lastmod>2026-10-14T01:21:08.040Z</lastmod>
+    <lastmod>2026-10-15T13:42:51.580Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mirajcs.github.io/calculus_II/index.html</loc>
+    <lastmod>2026-10-15T13:42:51.580Z</lastmod>
+  </url>
+  <url>
+    <loc>https://mirajcs.github.io/calculus_II/integration_by_parts.html</loc>
+    <lastmod>2026-10-15T13:42:51.580Z</lastmod>
   </url>
 </urlset>

@@ -1,0 +1,1472 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" lang="en" xml:lang="en"><head>
+
+<meta charset="utf-8">
+<meta name="generator" content="quarto-1.10.19">
+
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=yes">
+
+<meta name="author" content="Miraj Samarakkody">
+<meta name="dcterms.date" content="2026-10-15">
+
+<title>Lecture Notes: Trigonometric Integrals – Calculus II</title>
+<style>
+/* Default styles provided by pandoc.
+** See https://pandoc.org/MANUAL.html#variables-for-html for config info.
+*/
+span.smallcaps{font-variant: small-caps;}
+div.columns{display: flex; gap: 1.5em;}
+div.column{flex: auto;}
+@media screen {
+div.columns{gap: min(4vw, 1.5em);}
+div.column{overflow-x: auto;}
+}
+div.hanging-indent{margin-left: 1.5em; text-indent: -1.5em;}
+ul.task-list{list-style: none;}
+ul.task-list li input[type="checkbox"] {
+  width: 0.8em;
+  margin: 0 0.8em 0.2em -1em; /* quarto-specific, see https://github.com/quarto-dev/quarto-cli/issues/4556 */ 
+  vertical-align: middle;
+}
+/* CSS for syntax highlighting */
+html { -webkit-text-size-adjust: 100%; }
+pre > code.sourceCode { white-space: pre; position: relative; }
+pre > code.sourceCode > span { display: inline-block; line-height: 1.25; }
+pre > code.sourceCode > span:empty { height: 1.2em; }
+.sourceCode { overflow: visible; }
+code.sourceCode > span { color: inherit; text-decoration: inherit; }
+div.sourceCode { margin: 1em 0; }
+pre.sourceCode { margin: 0; }
+@media screen {
+div.sourceCode { overflow: auto; }
+}
+@media print {
+pre > code.sourceCode { white-space: pre-wrap; }
+pre > code.sourceCode > span { text-indent: -5em; padding-left: 5em; }
+}
+pre.numberSource code
+  { counter-reset: source-line 0; }
+pre.numberSource code > span
+  { position: relative; left: -4em; counter-increment: source-line; }
+pre.numberSource code > span > a:first-child::before
+  { content: counter(source-line);
+    position: relative; left: -1em; text-align: right; vertical-align: baseline;
+    border: none; display: inline-block;
+    -webkit-touch-callout: none; -webkit-user-select: none;
+    -khtml-user-select: none; -moz-user-select: none;
+    -ms-user-select: none; user-select: none;
+    padding: 0 4px; width: 4em;
+  }
+pre.numberSource { margin-left: 3em;  padding-left: 4px; }
+div.sourceCode
+  {   }
+@media screen {
+pre > code.sourceCode > span > a:first-child::before { text-decoration: underline; }
+}
+</style>
+
+
+<script src="site_libs/quarto-nav/quarto-nav.js"></script>
+<script src="site_libs/quarto-nav/headroom.min.js"></script>
+<script src="site_libs/clipboard/clipboard.min.js"></script>
+<script src="site_libs/quarto-search/autocomplete.umd.js"></script>
+<script src="site_libs/quarto-search/fuse.min.js"></script>
+<script src="site_libs/quarto-search/quarto-search.js"></script>
+<meta name="quarto:offset" content="./">
+<script src="site_libs/quarto-html/quarto.js" type="module"></script>
+<script src="site_libs/quarto-html/tabsets/tabsets.js" type="module"></script>
+<script src="site_libs/quarto-html/popper.min.js"></script>
+<script src="site_libs/quarto-html/tippy.umd.min.js"></script>
+<script src="site_libs/quarto-html/anchor.min.js"></script>
+<link href="site_libs/quarto-html/tippy.css" rel="stylesheet">
+<link href="site_libs/quarto-html/quarto-syntax-highlighting-bf27225e3a48a9273f3daa8f8e829971.css" rel="stylesheet" id="quarto-text-highlighting-styles">
+<script src="site_libs/bootstrap/bootstrap.min.js"></script>
+<link href="site_libs/bootstrap/bootstrap-icons.css" rel="stylesheet">
+<link href="site_libs/bootstrap/bootstrap-1be8b0523d4d9768e772587eab5b15c4.min.css" rel="stylesheet" append-hash="true" id="quarto-bootstrap" data-mode="light">
+<script id="quarto-search-options" type="application/json">{
+  "location": "navbar",
+  "copy-button": false,
+  "collapse-after": 3,
+  "panel-placement": "end",
+  "type": "overlay",
+  "limit": 50,
+  "keyboard-shortcut": [
+    "f",
+    "/",
+    "s"
+  ],
+  "show-item-context": false,
+  "language": {
+    "search-no-results-text": "No results",
+    "search-matching-documents-text": "matching documents",
+    "search-copy-link-title": "Copy link to search",
+    "search-hide-matches-text": "Hide additional matches",
+    "search-more-match-text": "more match in this document",
+    "search-more-matches-text": "more matches in this document",
+    "search-clear-button-title": "Clear",
+    "search-text-placeholder": "",
+    "search-detached-cancel-button-title": "Cancel",
+    "search-submit-button-title": "Submit",
+    "search-label": "Search"
+  }
+}</script>
+
+  <script src="https://cdnjs.cloudflare.com/polyfill/v3/polyfill.min.js?features=es6"></script>
+  <script defer="" src="https://cdn.jsdelivr.net/npm/mathjax@4/tex-chtml.js" type="text/javascript"></script>
+
+<script type="text/javascript">
+const typesetMath = (el) => {
+  if (window.MathJax) {
+    // MathJax Typeset
+    window.MathJax.typeset([el]);
+  } else if (window.katex) {
+    // KaTeX Render
+    var mathElements = el.getElementsByClassName("math");
+    var macros = [];
+    for (var i = 0; i < mathElements.length; i++) {
+      var texText = mathElements[i].firstChild;
+      if (mathElements[i].tagName == "SPAN" && texText && texText.data) {
+        window.katex.render(texText.data, mathElements[i], {
+          displayMode: mathElements[i].classList.contains('display'),
+          throwOnError: false,
+          macros: macros,
+          fleqn: false
+        });
+      }
+    }
+  }
+}
+window.Quarto = {
+  typesetMath
+};
+</script>
+
+</head>
+
+<body class="nav-sidebar docked nav-fixed quarto-light">
+
+<div id="quarto-search-results"></div>
+  <header id="quarto-header" class="headroom fixed-top">
+    <nav class="navbar navbar-expand-lg " data-bs-theme="dark">
+      <div class="navbar-container container-fluid">
+      <div class="navbar-brand-container mx-auto">
+    <a class="navbar-brand" href="./index.html">
+    <span class="navbar-title">Calculus II</span>
+    </a>
+  </div>
+            <div id="quarto-search" class="" title="Search"></div>
+          <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarCollapse" aria-controls="navbarCollapse" role="menu" aria-expanded="false" aria-label="Toggle navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+  <span class="navbar-toggler-icon"></span>
+</button>
+          <div class="collapse navbar-collapse" id="navbarCollapse">
+            <ul class="navbar-nav navbar-nav-scroll me-auto">
+  <li class="nav-item dropdown ">
+    <a class="nav-link dropdown-toggle" href="#" id="nav-menu-ch-7-techniques-of-integration" role="link" data-bs-toggle="dropdown" aria-expanded="false">
+ <span class="menu-text">Ch 7: Techniques of Integration</span>
+    </a>
+    <ul class="dropdown-menu" aria-labelledby="nav-menu-ch-7-techniques-of-integration">    
+        <li>
+    <a class="dropdown-item" href="./integration_table.html">
+ <span class="dropdown-text">Integration Rules</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./integration_by_parts.html">
+ <span class="dropdown-text">7.1 Integration by Parts</span></a>
+  </li>  
+        <li>
+    <a class="dropdown-item" href="./trigonometric_integrals.html">
+ <span class="dropdown-text">7.2 Trigonometric Integrals</span></a>
+  </li>  
+    </ul>
+  </li>
+</ul>
+          </div> <!-- /navcollapse -->
+            <div class="quarto-navbar-tools">
+</div>
+      </div> <!-- /container-fluid -->
+    </nav>
+  <nav class="quarto-secondary-nav">
+    <div class="container-fluid d-flex">
+      <button type="button" class="quarto-btn-toggle btn" data-bs-toggle="collapse" role="button" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">
+        <i class="bi bi-layout-text-sidebar-reverse"></i>
+      </button>
+        <nav class="quarto-page-breadcrumbs" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./integration_table.html">Chapter 7: Techniques of Integration</a></li><li class="breadcrumb-item"><a href="./trigonometric_integrals.html">7.2 Trigonometric Integrals</a></li></ol></nav>
+        <a class="flex-grow-1" role="navigation" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item" aria-controls="quarto-sidebar" aria-expanded="false" aria-label="Toggle sidebar navigation" onclick="if (window.quartoToggleHeadroom) { window.quartoToggleHeadroom(); }">      
+        </a>
+    </div>
+  </nav>
+</header>
+<!-- content -->
+<div id="quarto-content" class="quarto-container page-columns page-rows-contents page-layout-article page-navbar">
+<!-- sidebar -->
+  <nav id="quarto-sidebar" class="sidebar collapse collapse-horizontal quarto-sidebar-collapse-item sidebar-navigation docked overflow-auto">
+    <div class="sidebar-menu-container"> 
+    <ul class="list-unstyled mt-1">
+        <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./index.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Home</span></a>
+  </div>
+</li>
+        <li class="sidebar-item sidebar-item-section">
+      <div class="sidebar-item-container"> 
+            <a class="sidebar-item-text sidebar-link text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true">
+ <span class="menu-text">Chapter 7: Techniques of Integration</span></a>
+          <a class="sidebar-item-toggle text-start" data-bs-toggle="collapse" data-bs-target="#quarto-sidebar-section-1" role="navigation" aria-expanded="true" aria-label="Toggle section">
+            <i class="bi bi-chevron-right ms-2"></i>
+          </a> 
+      </div>
+      <ul id="quarto-sidebar-section-1" class="collapse list-unstyled sidebar-section depth1 show">  
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./integration_table.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">Integration Rules</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./integration_by_parts.html" class="sidebar-item-text sidebar-link">
+ <span class="menu-text">7.1 Integration by Parts</span></a>
+  </div>
+</li>
+          <li class="sidebar-item">
+  <div class="sidebar-item-container"> 
+  <a href="./trigonometric_integrals.html" class="sidebar-item-text sidebar-link active">
+ <span class="menu-text">7.2 Trigonometric Integrals</span></a>
+  </div>
+</li>
+      </ul>
+  </li>
+    </ul>
+    </div>
+</nav>
+<div id="quarto-sidebar-glass" class="quarto-sidebar-collapse-item" data-bs-toggle="collapse" data-bs-target=".quarto-sidebar-collapse-item"></div>
+<!-- margin-sidebar -->
+    <div id="quarto-margin-sidebar" class="sidebar margin-sidebar">
+        <nav id="TOC" role="doc-toc" class="toc-active">
+    <h2 id="toc-title">On this page</h2>
+   
+  <ul>
+  <li><a href="#the-identities-we-need" id="toc-the-identities-we-need" class="nav-link active" data-scroll-target="#the-identities-we-need">1. The identities we need</a>
+  <ul class="collapse">
+  <li><a href="#a-checking-function" id="toc-a-checking-function" class="nav-link" data-scroll-target="#a-checking-function">A checking function</a></li>
+  </ul></li>
+  <li><a href="#powers-of-sine-and-cosine-displaystyleintsinm-xcosn-xdx" id="toc-powers-of-sine-and-cosine-displaystyleintsinm-xcosn-xdx" class="nav-link" data-scroll-target="#powers-of-sine-and-cosine-displaystyleintsinm-xcosn-xdx">2. Powers of sine and cosine: <span class="math inline">\(\displaystyle\int\sin^m x\cos^n x\,dx\)</span></a>
+  <ul class="collapse">
+  <li><a href="#example-1-displaystyleintcos3-xdx" id="toc-example-1-displaystyleintcos3-xdx" class="nav-link" data-scroll-target="#example-1-displaystyleintcos3-xdx">Example 1: <span class="math inline">\(\displaystyle\int\cos^3 x\,dx\)</span></a></li>
+  <li><a href="#example-2-displaystyleintsin5-xcos2-xdx" id="toc-example-2-displaystyleintsin5-xcos2-xdx" class="nav-link" data-scroll-target="#example-2-displaystyleintsin5-xcos2-xdx">Example 2: <span class="math inline">\(\displaystyle\int\sin^5 x\cos^2 x\,dx\)</span></a></li>
+  <li><a href="#the-strategy-when-one-power-is-odd" id="toc-the-strategy-when-one-power-is-odd" class="nav-link" data-scroll-target="#the-strategy-when-one-power-is-odd">The strategy when one power is odd</a></li>
+  <li><a href="#example-3-displaystyleint_0pisin2-xdx-both-powers-even" id="toc-example-3-displaystyleint_0pisin2-xdx-both-powers-even" class="nav-link" data-scroll-target="#example-3-displaystyleint_0pisin2-xdx-both-powers-even">Example 3: <span class="math inline">\(\displaystyle\int_0^\pi\sin^2 x\,dx\)</span> (both powers even)</a></li>
+  <li><a href="#example-4-displaystyleintsin4-xdx" id="toc-example-4-displaystyleintsin4-xdx" class="nav-link" data-scroll-target="#example-4-displaystyleintsin4-xdx">Example 4: <span class="math inline">\(\displaystyle\int\sin^4 x\,dx\)</span></a></li>
+  <li><a href="#the-strategy-when-both-powers-are-even" id="toc-the-strategy-when-both-powers-are-even" class="nav-link" data-scroll-target="#the-strategy-when-both-powers-are-even">The strategy when both powers are even</a></li>
+  </ul></li>
+  <li><a href="#powers-of-tangent-and-secant-displaystyleinttanm-xsecn-xdx" id="toc-powers-of-tangent-and-secant-displaystyleinttanm-xsecn-xdx" class="nav-link" data-scroll-target="#powers-of-tangent-and-secant-displaystyleinttanm-xsecn-xdx">3. Powers of tangent and secant: <span class="math inline">\(\displaystyle\int\tan^m x\sec^n x\,dx\)</span></a>
+  <ul class="collapse">
+  <li><a href="#example-5-displaystyleinttan6-xsec4-xdx" id="toc-example-5-displaystyleinttan6-xsec4-xdx" class="nav-link" data-scroll-target="#example-5-displaystyleinttan6-xsec4-xdx">Example 5: <span class="math inline">\(\displaystyle\int\tan^6 x\sec^4 x\,dx\)</span></a></li>
+  <li><a href="#example-6-displaystyleinttan5thetasec7thetadtheta" id="toc-example-6-displaystyleinttan5thetasec7thetadtheta" class="nav-link" data-scroll-target="#example-6-displaystyleinttan5thetasec7thetadtheta">Example 6: <span class="math inline">\(\displaystyle\int\tan^5\theta\sec^7\theta\,d\theta\)</span></a></li>
+  <li><a href="#the-strategy-for-tanm-xsecn-x" id="toc-the-strategy-for-tanm-xsecn-x" class="nav-link" data-scroll-target="#the-strategy-for-tanm-xsecn-x">The strategy for <span class="math inline">\(\tan^m x\sec^n x\)</span></a></li>
+  <li><a href="#the-other-cases-inttan-xdx-and-intsec-xdx" id="toc-the-other-cases-inttan-xdx-and-intsec-xdx" class="nav-link" data-scroll-target="#the-other-cases-inttan-xdx-and-intsec-xdx">The other cases: <span class="math inline">\(\int\tan x\,dx\)</span> and <span class="math inline">\(\int\sec x\,dx\)</span></a></li>
+  <li><a href="#example-7-displaystyleinttan3-xdx" id="toc-example-7-displaystyleinttan3-xdx" class="nav-link" data-scroll-target="#example-7-displaystyleinttan3-xdx">Example 7: <span class="math inline">\(\displaystyle\int\tan^3 x\,dx\)</span></a></li>
+  <li><a href="#example-8-displaystyleintsec3-xdx-integration-by-parts" id="toc-example-8-displaystyleintsec3-xdx-integration-by-parts" class="nav-link" data-scroll-target="#example-8-displaystyleintsec3-xdx-integration-by-parts">Example 8: <span class="math inline">\(\displaystyle\int\sec^3 x\,dx\)</span> (integration by parts)</a></li>
+  </ul></li>
+  <li><a href="#products-with-different-angles" id="toc-products-with-different-angles" class="nav-link" data-scroll-target="#products-with-different-angles">4. Products with different angles</a>
+  <ul class="collapse">
+  <li><a href="#example-9-displaystyleintsin-4xcos-5xdx" id="toc-example-9-displaystyleintsin-4xcos-5xdx" class="nav-link" data-scroll-target="#example-9-displaystyleintsin-4xcos-5xdx">Example 9: <span class="math inline">\(\displaystyle\int\sin 4x\cos 5x\,dx\)</span></a></li>
+  <li><a href="#application-orthogonality" id="toc-application-orthogonality" class="nav-link" data-scroll-target="#application-orthogonality">Application: orthogonality</a></li>
+  </ul></li>
+  <li><a href="#common-mistakes" id="toc-common-mistakes" class="nav-link" data-scroll-target="#common-mistakes">5. Common mistakes</a></li>
+  <li><a href="#practice-problems" id="toc-practice-problems" class="nav-link" data-scroll-target="#practice-problems">6. Practice problems</a></li>
+  <li><a href="#summary" id="toc-summary" class="nav-link" data-scroll-target="#summary">Summary</a></li>
+  </ul>
+<div class="quarto-alternate-formats"><h2>Other Formats</h2><ul><li><a href="trigonometric_integrals.pdf"><i class="bi bi-file-pdf"></i>PDF</a></li></ul></div></nav>
+    </div>
+<!-- main -->
+<main class="content" id="quarto-document-content">
+
+<header id="title-block-header" class="quarto-title-block default"><nav class="quarto-page-breadcrumbs quarto-title-breadcrumbs d-none d-lg-block" aria-label="breadcrumb"><ol class="breadcrumb"><li class="breadcrumb-item"><a href="./integration_table.html">Chapter 7: Techniques of Integration</a></li><li class="breadcrumb-item"><a href="./trigonometric_integrals.html">7.2 Trigonometric Integrals</a></li></ol></nav>
+<div class="quarto-title">
+<h1 class="title">Lecture Notes: Trigonometric Integrals</h1>
+</div>
+
+
+
+<div class="quarto-title-meta">
+
+    <div>
+    <div class="quarto-title-meta-heading">Author</div>
+    <div class="quarto-title-meta-contents">
+             <p>Miraj Samarakkody </p>
+          </div>
+  </div>
+    
+    <div>
+    <div class="quarto-title-meta-heading">Published</div>
+    <div class="quarto-title-meta-contents">
+      <p class="date">October 15, 2026</p>
+    </div>
+  </div>
+  
+    
+  </div>
+  
+
+
+</header>
+
+
+<p><em>Stewart, <strong>Calculus</strong>, §7.2</em></p>
+<p><strong>Learning objectives.</strong> By the end of this lecture you should be able to: 1. Integrate <span class="math inline">\(\sin^m x\cos^n x\)</span> by saving one factor and substituting, or with half-angle identities. 2. Integrate <span class="math inline">\(\tan^m x\sec^n x\)</span> the same way. 3. Find <span class="math inline">\(\int\tan x\,dx\)</span>, <span class="math inline">\(\int\sec x\,dx\)</span> and <span class="math inline">\(\int\sec^3 x\,dx\)</span>. 4. Use product-to-sum identities for <span class="math inline">\(\sin mx\cos nx\)</span>, <span class="math inline">\(\sin mx\sin nx\)</span> and <span class="math inline">\(\cos mx\cos nx\)</span>. 5. Check every answer symbolically with <strong>SymPy</strong> and numerically with <strong>NumPy</strong>.</p>
+<div id="be2066c4" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:45.944055Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:45.943907Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.212245Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.211789Z&quot;}}" data-execution_count="1">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb1"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb1-1"><a href="#cb1-1" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> numpy <span class="im">as</span> np</span>
+<span id="cb1-2"><a href="#cb1-2" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> sympy <span class="im">as</span> sp</span>
+<span id="cb1-3"><a href="#cb1-3" aria-hidden="true" tabindex="-1"></a><span class="im">import</span> matplotlib.pyplot <span class="im">as</span> plt</span>
+<span id="cb1-4"><a href="#cb1-4" aria-hidden="true" tabindex="-1"></a><span class="im">from</span> IPython.display <span class="im">import</span> Math, display</span>
+<span id="cb1-5"><a href="#cb1-5" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb1-6"><a href="#cb1-6" aria-hidden="true" tabindex="-1"></a>sp.init_printing()</span>
+<span id="cb1-7"><a href="#cb1-7" aria-hidden="true" tabindex="-1"></a>x, u <span class="op">=</span> sp.symbols(<span class="st">"x u"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+<section id="the-identities-we-need" class="level2">
+<h2 class="anchored" data-anchor-id="the-identities-we-need">1. The identities we need</h2>
+<p>Every technique in this section uses one of these identities to rewrite the integrand.</p>
+<table class="caption-top table">
+<thead>
+<tr class="header">
+<th>Name</th>
+<th>Identity</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Pythagorean</td>
+<td><span class="math inline">\(\sin^2 x + \cos^2 x = 1\)</span></td>
+</tr>
+<tr class="even">
+<td>Pythagorean (tan/sec)</td>
+<td><span class="math inline">\(\tan^2 x + 1 = \sec^2 x\)</span></td>
+</tr>
+<tr class="odd">
+<td>Half-angle</td>
+<td><span class="math inline">\(\sin^2 x = \tfrac12(1 - \cos 2x)\)</span></td>
+</tr>
+<tr class="even">
+<td>Half-angle</td>
+<td><span class="math inline">\(\cos^2 x = \tfrac12(1 + \cos 2x)\)</span></td>
+</tr>
+<tr class="odd">
+<td>Double-angle</td>
+<td><span class="math inline">\(\sin x\cos x = \tfrac12\sin 2x\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>We also need these derivatives, because they decide which substitution works: <span class="math display">\[\frac{d}{dx}\sin x = \cos x,\qquad \frac{d}{dx}\cos x = -\sin x,\qquad \frac{d}{dx}\tan x = \sec^2 x,\qquad \frac{d}{dx}\sec x = \sec x\tan x.\]</span></p>
+<p>Let’s confirm the identities with SymPy:</p>
+<div id="87d0dd10" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.213698Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.213614Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.284572Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.284216Z&quot;}}" data-execution_count="2">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb2"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb2-1"><a href="#cb2-1" aria-hidden="true" tabindex="-1"></a>identities <span class="op">=</span> {</span>
+<span id="cb2-2"><a href="#cb2-2" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"</span><span class="dv">\s</span><span class="vs">in</span><span class="dv">^</span><span class="vs">2 x </span><span class="op">+</span><span class="vs"> </span><span class="er">\</span><span class="vs">cos</span><span class="dv">^</span><span class="vs">2 x = 1"</span>: sp.sin(x)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> sp.cos(x)<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span>,</span>
+<span id="cb2-3"><a href="#cb2-3" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"</span><span class="ch">\t</span><span class="vs">an</span><span class="dv">^</span><span class="vs">2 x </span><span class="op">+</span><span class="vs"> 1 = </span><span class="dv">\s</span><span class="vs">ec</span><span class="dv">^</span><span class="vs">2 x"</span>: sp.tan(x)<span class="op">**</span><span class="dv">2</span> <span class="op">+</span> <span class="dv">1</span> <span class="op">-</span> sp.sec(x)<span class="op">**</span><span class="dv">2</span>,</span>
+<span id="cb2-4"><a href="#cb2-4" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"</span><span class="dv">\s</span><span class="vs">in</span><span class="dv">^</span><span class="vs">2 x = </span><span class="ch">\t</span><span class="vs">frac12</span><span class="kw">(</span><span class="vs">1-</span><span class="er">\</span><span class="vs">cos 2x</span><span class="kw">)</span><span class="vs">"</span>: sp.sin(x)<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> (<span class="dv">1</span> <span class="op">-</span> sp.cos(<span class="dv">2</span> <span class="op">*</span> x)) <span class="op">/</span> <span class="dv">2</span>,</span>
+<span id="cb2-5"><a href="#cb2-5" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"</span><span class="er">\</span><span class="vs">cos</span><span class="dv">^</span><span class="vs">2 x = </span><span class="ch">\t</span><span class="vs">frac12</span><span class="kw">(</span><span class="vs">1</span><span class="op">+</span><span class="er">\</span><span class="vs">cos 2x</span><span class="kw">)</span><span class="vs">"</span>: sp.cos(x)<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> (<span class="dv">1</span> <span class="op">+</span> sp.cos(<span class="dv">2</span> <span class="op">*</span> x)) <span class="op">/</span> <span class="dv">2</span>,</span>
+<span id="cb2-6"><a href="#cb2-6" aria-hidden="true" tabindex="-1"></a>    <span class="vs">r"</span><span class="dv">\s</span><span class="vs">in x</span><span class="er">\</span><span class="vs">cos x = </span><span class="ch">\t</span><span class="vs">frac12</span><span class="dv">\s</span><span class="vs">in 2x"</span>: sp.sin(x) <span class="op">*</span> sp.cos(x) <span class="op">-</span> sp.sin(<span class="dv">2</span> <span class="op">*</span> x) <span class="op">/</span> <span class="dv">2</span>,</span>
+<span id="cb2-7"><a href="#cb2-7" aria-hidden="true" tabindex="-1"></a>}</span>
+<span id="cb2-8"><a href="#cb2-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> name, diff <span class="kw">in</span> identities.items():</span>
+<span id="cb2-9"><a href="#cb2-9" aria-hidden="true" tabindex="-1"></a>    display(Math(name <span class="op">+</span> <span class="vs">rf"</span><span class="er">\</span><span class="vs">quad</span><span class="ch">\t</span><span class="vs">ext</span><span class="ch">{{</span><span class="vs">: </span><span class="sc">{</span>sp<span class="sc">.</span>simplify(diff) <span class="op">==</span> <span class="dv">0</span><span class="sc">}</span><span class="ch">}}</span><span class="vs">"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \sin^2 x + \cos^2 x = 1\quad\text{: True}\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \tan^2 x + 1 = \sec^2 x\quad\text{: True}\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \sin^2 x = \tfrac12(1-\cos 2x)\quad\text{: True}\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \cos^2 x = \tfrac12(1+\cos 2x)\quad\text{: True}\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \sin x\cos x = \tfrac12\sin 2x\quad\text{: True}\)</span></p>
+</div>
+</div>
+<section id="a-checking-function" class="level3">
+<h3 class="anchored" data-anchor-id="a-checking-function">A checking function</h3>
+<p>As in §7.1, we check every antiderivative by differentiating it. Trig answers can look very different and still be equal, so if <code>simplify</code> cannot reduce <span class="math inline">\(F' - f\)</span> to <span class="math inline">\(0\)</span>, the function also compares <span class="math inline">\(F'\)</span> and <span class="math inline">\(f\)</span> numerically at a few points.</p>
+<div id="78f74a6c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.285582Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.285527Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.287364Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.287026Z&quot;}}" data-execution_count="3">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb3"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb3-1"><a href="#cb3-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> check(F, integrand, var<span class="op">=</span>x):</span>
+<span id="cb3-2"><a href="#cb3-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># Verify F' = integrand: symbolically first, then numerically at sample points</span></span>
+<span id="cb3-3"><a href="#cb3-3" aria-hidden="true" tabindex="-1"></a>    diff <span class="op">=</span> sp.diff(F, var) <span class="op">-</span> integrand</span>
+<span id="cb3-4"><a href="#cb3-4" aria-hidden="true" tabindex="-1"></a>    ok <span class="op">=</span> sp.simplify(diff) <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb3-5"><a href="#cb3-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> <span class="kw">not</span> ok:</span>
+<span id="cb3-6"><a href="#cb3-6" aria-hidden="true" tabindex="-1"></a>        pts <span class="op">=</span> [<span class="fl">0.3</span>, <span class="fl">0.7</span>, <span class="fl">1.1</span>, <span class="fl">2.0</span>, <span class="op">-</span><span class="fl">0.4</span>]</span>
+<span id="cb3-7"><a href="#cb3-7" aria-hidden="true" tabindex="-1"></a>        ok <span class="op">=</span> <span class="bu">all</span>(<span class="bu">abs</span>(<span class="bu">complex</span>(diff.subs(var, p).evalf())) <span class="op">&lt;</span> <span class="fl">1e-10</span> <span class="cf">for</span> p <span class="kw">in</span> pts)</span>
+<span id="cb3-8"><a href="#cb3-8" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="st">"d/dx(answer) == integrand:"</span>, ok)</span>
+<span id="cb3-9"><a href="#cb3-9" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> ok</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+</div>
+</section>
+</section>
+<section id="powers-of-sine-and-cosine-displaystyleintsinm-xcosn-xdx" class="level2">
+<h2 class="anchored" data-anchor-id="powers-of-sine-and-cosine-displaystyleintsinm-xcosn-xdx">2. Powers of sine and cosine: <span class="math inline">\(\displaystyle\int\sin^m x\cos^n x\,dx\)</span></h2>
+<section id="example-1-displaystyleintcos3-xdx" class="level3">
+<h3 class="anchored" data-anchor-id="example-1-displaystyleintcos3-xdx">Example 1: <span class="math inline">\(\displaystyle\int\cos^3 x\,dx\)</span></h3>
+<p>The substitution <span class="math inline">\(u = \cos x\)</span> doesn’t work, because <span class="math inline">\(du = -\sin x\,dx\)</span> and there is no <span class="math inline">\(\sin x\)</span> in the integrand. Instead, <strong>save one factor</strong> of <span class="math inline">\(\cos x\)</span> for <span class="math inline">\(du\)</span> and turn the rest into sines: <span class="math display">\[\cos^3 x = \cos^2 x\cdot\cos x = (1 - \sin^2 x)\cos x.\]</span> Now <span class="math inline">\(u = \sin x\)</span>, <span class="math inline">\(du = \cos x\,dx\)</span>: <span class="math display">\[\int\cos^3 x\,dx = \int(1 - u^2)\,du = u - \tfrac13u^3 + C = \sin x - \tfrac13\sin^3 x + C.\]</span></p>
+<div id="955f53fb" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.288271Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.288223Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.306416Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.306063Z&quot;}}" data-execution_count="4">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb4"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb4-1"><a href="#cb4-1" aria-hidden="true" tabindex="-1"></a>integrand_u <span class="op">=</span> <span class="dv">1</span> <span class="op">-</span> u<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb4-2"><a href="#cb4-2" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> sp.integrate(integrand_u, u)</span>
+<span id="cb4-3"><a href="#cb4-3" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> G.subs(u, sp.sin(x))</span>
+<span id="cb4-4"><a href="#cb4-4" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int</span><span class="kw">(</span><span class="vs">1-u</span><span class="dv">^</span><span class="vs">2</span><span class="kw">)</span><span class="ch">\,</span><span class="vs">du = "</span> <span class="op">+</span> sp.latex(G) <span class="op">+</span> <span class="vs">r"</span><span class="er">\</span><span class="vs">qquad</span><span class="er">\</span><span class="vs">Longrightarrow</span><span class="er">\</span><span class="vs">qquad </span><span class="er">\</span><span class="vs">int</span><span class="er">\</span><span class="vs">cos</span><span class="dv">^</span><span class="vs">3x</span><span class="ch">\,</span><span class="vs">dx = "</span> <span class="op">+</span> sp.latex(F) <span class="op">+</span> <span class="st">" + C"</span>))</span>
+<span id="cb4-5"><a href="#cb4-5" aria-hidden="true" tabindex="-1"></a>check(F, sp.cos(x)<span class="op">**</span><span class="dv">3</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int(1-u^2)\,du = - \frac{u^{3}}{3} + u\qquad\Longrightarrow\qquad \int\cos^3x\,dx = - \frac{\sin^{3}{\left(x \right)}}{3} + \sin{\left(x \right)} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+</div>
+</section>
+<section id="example-2-displaystyleintsin5-xcos2-xdx" class="level3">
+<h3 class="anchored" data-anchor-id="example-2-displaystyleintsin5-xcos2-xdx">Example 2: <span class="math inline">\(\displaystyle\int\sin^5 x\cos^2 x\,dx\)</span></h3>
+<p>This time the power of <strong>sine</strong> is odd. Save one <span class="math inline">\(\sin x\)</span> for <span class="math inline">\(du\)</span> and convert the remaining <span class="math inline">\(\sin^4 x\)</span> into cosines: <span class="math display">\[\sin^5 x\cos^2 x = (\sin^2 x)^2\cos^2 x\cdot\sin x = (1 - \cos^2 x)^2\cos^2 x\,\sin x.\]</span> With <span class="math inline">\(u = \cos x\)</span>, <span class="math inline">\(du = -\sin x\,dx\)</span>: <span class="math display">\[\begin{aligned}
+\int\sin^5 x\cos^2 x\,dx &amp;= -\int(1 - u^2)^2u^2\,du = -\int(u^2 - 2u^4 + u^6)\,du\\
+&amp;= -\tfrac13\cos^3 x + \tfrac25\cos^5 x - \tfrac17\cos^7 x + C.
+\end{aligned}\]</span></p>
+<div id="b52a2364" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.307549Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.307478Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.326539Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.326139Z&quot;}}" data-execution_count="5">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb6"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb6-1"><a href="#cb6-1" aria-hidden="true" tabindex="-1"></a>integrand_u <span class="op">=</span> <span class="op">-</span>(<span class="dv">1</span> <span class="op">-</span> u<span class="op">**</span><span class="dv">2</span>)<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> u<span class="op">**</span><span class="dv">2</span></span>
+<span id="cb6-2"><a href="#cb6-2" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> sp.integrate(sp.expand(integrand_u), u)</span>
+<span id="cb6-3"><a href="#cb6-3" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> G.subs(u, sp.cos(x))</span>
+<span id="cb6-4"><a href="#cb6-4" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int</span><span class="dv">\s</span><span class="vs">in</span><span class="dv">^</span><span class="vs">5x</span><span class="er">\</span><span class="vs">cos</span><span class="dv">^</span><span class="vs">2x</span><span class="ch">\,</span><span class="vs">dx = "</span> <span class="op">+</span> sp.latex(F) <span class="op">+</span> <span class="st">" + C"</span>))</span>
+<span id="cb6-5"><a href="#cb6-5" aria-hidden="true" tabindex="-1"></a>check(F, sp.sin(x)<span class="op">**</span><span class="dv">5</span> <span class="op">*</span> sp.cos(x)<span class="op">**</span><span class="dv">2</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int\sin^5x\cos^2x\,dx = - \frac{\cos^{7}{\left(x \right)}}{7} + \frac{2 \cos^{5}{\left(x \right)}}{5} - \frac{\cos^{3}{\left(x \right)}}{3} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+</div>
+</section>
+<section id="the-strategy-when-one-power-is-odd" class="level3">
+<h3 class="anchored" data-anchor-id="the-strategy-when-one-power-is-odd">The strategy when one power is odd</h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Case</th>
+<th>Save</th>
+<th>Convert the rest with</th>
+<th>Substitute</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>power of <span class="math inline">\(\cos\)</span> is <strong>odd</strong></td>
+<td>one <span class="math inline">\(\cos x\)</span></td>
+<td><span class="math inline">\(\cos^2 x = 1 - \sin^2 x\)</span></td>
+<td><span class="math inline">\(u = \sin x\)</span></td>
+</tr>
+<tr class="even">
+<td>power of <span class="math inline">\(\sin\)</span> is <strong>odd</strong></td>
+<td>one <span class="math inline">\(\sin x\)</span></td>
+<td><span class="math inline">\(\sin^2 x = 1 - \cos^2 x\)</span></td>
+<td><span class="math inline">\(u = \cos x\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>If both powers are odd, either choice works.</p>
+<p>The function below does these steps for any <span class="math inline">\(m, n \ge 0\)</span> with at least one odd. It shows the integral in <span class="math inline">\(u\)</span>, so you can compare it with your own work.</p>
+<div id="0d93008f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.327565Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.327510Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.356936Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.356641Z&quot;}}" data-execution_count="6">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb8"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb8-1"><a href="#cb8-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> sin_cos_odd(m, n):</span>
+<span id="cb8-2"><a href="#cb8-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ∫ sin^m x cos^n x dx when m or n is odd, by saving one factor and substituting</span></span>
+<span id="cb8-3"><a href="#cb8-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">1</span>:                       <span class="co"># save cos x, u = sin x, du = cos x dx</span></span>
+<span id="cb8-4"><a href="#cb8-4" aria-hidden="true" tabindex="-1"></a>        sub, g <span class="op">=</span> sp.sin(x), u<span class="op">**</span>m <span class="op">*</span> (<span class="dv">1</span> <span class="op">-</span> u<span class="op">**</span><span class="dv">2</span>)<span class="op">**</span>((n <span class="op">-</span> <span class="dv">1</span>) <span class="op">//</span> <span class="dv">2</span>)</span>
+<span id="cb8-5"><a href="#cb8-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> m <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">1</span>:                     <span class="co"># save sin x, u = cos x, du = -sin x dx</span></span>
+<span id="cb8-6"><a href="#cb8-6" aria-hidden="true" tabindex="-1"></a>        sub, g <span class="op">=</span> sp.cos(x), <span class="op">-</span>(<span class="dv">1</span> <span class="op">-</span> u<span class="op">**</span><span class="dv">2</span>)<span class="op">**</span>((m <span class="op">-</span> <span class="dv">1</span>) <span class="op">//</span> <span class="dv">2</span>) <span class="op">*</span> u<span class="op">**</span>n</span>
+<span id="cb8-7"><a href="#cb8-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb8-8"><a href="#cb8-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"both powers are even: use the half-angle identities"</span>)</span>
+<span id="cb8-9"><a href="#cb8-9" aria-hidden="true" tabindex="-1"></a>    G <span class="op">=</span> sp.integrate(sp.expand(g), u)</span>
+<span id="cb8-10"><a href="#cb8-10" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> G.subs(u, sub)</span>
+<span id="cb8-11"><a href="#cb8-11" aria-hidden="true" tabindex="-1"></a>    display(Math(</span>
+<span id="cb8-12"><a href="#cb8-12" aria-hidden="true" tabindex="-1"></a>        <span class="vs">rf"u = </span><span class="sc">{</span>sp<span class="sc">.</span>latex(sub)<span class="sc">}</span><span class="vs">:</span><span class="er">\</span><span class="vs">quad </span><span class="er">\</span><span class="vs">int </span><span class="dv">\s</span><span class="vs">in</span><span class="dv">^</span><span class="ch">{{</span><span class="sc">{</span>m<span class="sc">}</span><span class="ch">}}</span><span class="vs">x</span><span class="er">\</span><span class="vs">cos</span><span class="dv">^</span><span class="ch">{{</span><span class="sc">{</span>n<span class="sc">}</span><span class="ch">}}</span><span class="vs">x</span><span class="ch">\,</span><span class="vs">dx = </span><span class="er">\</span><span class="vs">int </span><span class="sc">{</span>sp<span class="sc">.</span>latex(sp.factor(g))<span class="sc">}</span><span class="ch">\,</span><span class="vs">du"</span></span>
+<span id="cb8-13"><a href="#cb8-13" aria-hidden="true" tabindex="-1"></a>        <span class="vs">rf" = </span><span class="sc">{</span>sp<span class="sc">.</span>latex(F)<span class="sc">}</span><span class="vs"> </span><span class="op">+</span><span class="vs"> C"</span></span>
+<span id="cb8-14"><a href="#cb8-14" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb8-15"><a href="#cb8-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> F</span>
+<span id="cb8-16"><a href="#cb8-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb8-17"><a href="#cb8-17" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> sin_cos_odd(<span class="dv">2</span>, <span class="dv">5</span>)</span>
+<span id="cb8-18"><a href="#cb8-18" aria-hidden="true" tabindex="-1"></a>check(F, sp.sin(x)<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> sp.cos(x)<span class="op">**</span><span class="dv">5</span>)<span class="op">;</span></span>
+<span id="cb8-19"><a href="#cb8-19" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> sin_cos_odd(<span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb8-20"><a href="#cb8-20" aria-hidden="true" tabindex="-1"></a>check(F, sp.sin(x)<span class="op">**</span><span class="dv">3</span> <span class="op">*</span> sp.cos(x)<span class="op">**</span><span class="dv">3</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle u = \sin{\left(x \right)}:\quad \int \sin^{2}x\cos^{5}x\,dx = \int u^{2} \left(u - 1\right)^{2} \left(u + 1\right)^{2}\,du = \frac{\sin^{7}{\left(x \right)}}{7} - \frac{2 \sin^{5}{\left(x \right)}}{5} + \frac{\sin^{3}{\left(x \right)}}{3} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle u = \sin{\left(x \right)}:\quad \int \sin^{3}x\cos^{3}x\,dx = \int - u^{3} \left(u - 1\right) \left(u + 1\right)\,du = - \frac{\sin^{6}{\left(x \right)}}{6} + \frac{\sin^{4}{\left(x \right)}}{4} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+</div>
+</section>
+<section id="example-3-displaystyleint_0pisin2-xdx-both-powers-even" class="level3">
+<h3 class="anchored" data-anchor-id="example-3-displaystyleint_0pisin2-xdx-both-powers-even">Example 3: <span class="math inline">\(\displaystyle\int_0^\pi\sin^2 x\,dx\)</span> (both powers even)</h3>
+<p>Saving one <span class="math inline">\(\sin x\)</span> leaves <span class="math inline">\(\sin x\)</span>, which can’t be written in terms of <span class="math inline">\(\cos x\)</span> without a square root. When <strong>both powers are even</strong>, use the half-angle identity instead: <span class="math display">\[\int_0^\pi\sin^2 x\,dx = \tfrac12\int_0^\pi(1 - \cos 2x)\,dx = \tfrac12\Big[x - \tfrac12\sin 2x\Big]_0^\pi = \tfrac12\Big(\pi - \tfrac12\sin 2\pi\Big) - \tfrac12(0 - 0) = \frac{\pi}{2}.\]</span></p>
+<p><strong>Symbolic and numerical check:</strong></p>
+<div id="17792327" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.358019Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.357968Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.364470Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.364060Z&quot;}}" data-execution_count="7">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb11"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb11-1"><a href="#cb11-1" aria-hidden="true" tabindex="-1"></a>exact <span class="op">=</span> sp.integrate(sp.sin(x)<span class="op">**</span><span class="dv">2</span>, (x, <span class="dv">0</span>, sp.pi))</span>
+<span id="cb11-2"><a href="#cb11-2" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int_0</span><span class="dv">^</span><span class="er">\</span><span class="vs">pi</span><span class="dv">\s</span><span class="vs">in</span><span class="dv">^</span><span class="vs">2x</span><span class="ch">\,</span><span class="vs">dx = "</span> <span class="op">+</span> sp.latex(exact) <span class="op">+</span> <span class="vs">rf" </span><span class="ch">\a</span><span class="vs">pprox </span><span class="sc">{</span><span class="bu">float</span>(exact)<span class="sc">:.10f}</span><span class="vs">"</span>))</span>
+<span id="cb11-3"><a href="#cb11-3" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb11-4"><a href="#cb11-4" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> np.linspace(<span class="dv">0</span>, np.pi, <span class="dv">100_001</span>)</span>
+<span id="cb11-5"><a href="#cb11-5" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="ss">f"NumPy trapezoid: </span><span class="sc">{</span>np<span class="sc">.</span>trapezoid(np.sin(xs)<span class="op">**</span><span class="dv">2</span>, xs)<span class="sc">:.10f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int_0^\pi\sin^2x\,dx = \frac{\pi}{2} \approx 1.5707963268\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NumPy trapezoid: 1.5707963268</code></pre>
+</div>
+</div>
+<p><strong>Why <span class="math inline">\(\pi/2\)</span>?</strong> The half-angle identity says <span class="math inline">\(\sin^2 x\)</span> is the constant <span class="math inline">\(\tfrac12\)</span> plus a cosine wave <span class="math inline">\(-\tfrac12\cos 2x\)</span>. Over a whole period the wave has zero net area, so only the <span class="math inline">\(\tfrac12\)</span> is left: <span class="math inline">\(\tfrac12\cdot\pi\)</span>.</p>
+<div id="8829241a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.365373Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.365321Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.463833Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.463489Z&quot;}}" data-execution_count="8">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb13"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb13-1"><a href="#cb13-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="dv">0</span>, np.pi, <span class="dv">400</span>)</span>
+<span id="cb13-2"><a href="#cb13-2" aria-hidden="true" tabindex="-1"></a>fig, ax <span class="op">=</span> plt.subplots(figsize<span class="op">=</span>(<span class="dv">7</span>, <span class="fl">3.5</span>))</span>
+<span id="cb13-3"><a href="#cb13-3" aria-hidden="true" tabindex="-1"></a>ax.plot(t, np.sin(t)<span class="op">**</span><span class="dv">2</span>, <span class="st">"k"</span>, lw<span class="op">=</span><span class="dv">2</span>, label<span class="op">=</span><span class="vs">r"</span><span class="dv">$\s</span><span class="vs">in</span><span class="dv">^</span><span class="vs">2 x</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb13-4"><a href="#cb13-4" aria-hidden="true" tabindex="-1"></a>ax.axhline(<span class="fl">0.5</span>, color<span class="op">=</span><span class="st">"C1"</span>, ls<span class="op">=</span><span class="st">"--"</span>, label<span class="op">=</span><span class="vs">r"</span><span class="dv">$</span><span class="ch">\f</span><span class="vs">rac</span><span class="op">{1}{2}</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb13-5"><a href="#cb13-5" aria-hidden="true" tabindex="-1"></a>ax.plot(t, <span class="op">-</span><span class="fl">0.5</span> <span class="op">*</span> np.cos(<span class="dv">2</span> <span class="op">*</span> t), color<span class="op">=</span><span class="st">"C0"</span>, lw<span class="op">=</span><span class="dv">1</span>, label<span class="op">=</span><span class="vs">r"</span><span class="dv">$</span><span class="vs">-</span><span class="ch">\f</span><span class="vs">rac</span><span class="op">{1}{2}</span><span class="er">\</span><span class="vs">cos 2x</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb13-6"><a href="#cb13-6" aria-hidden="true" tabindex="-1"></a>ax.fill_between(t, <span class="fl">0.5</span>, np.sin(t)<span class="op">**</span><span class="dv">2</span>, alpha<span class="op">=</span><span class="fl">0.25</span>, color<span class="op">=</span><span class="st">"C0"</span>)</span>
+<span id="cb13-7"><a href="#cb13-7" aria-hidden="true" tabindex="-1"></a>ax.set_xticks([<span class="dv">0</span>, np.pi <span class="op">/</span> <span class="dv">2</span>, np.pi], [<span class="st">"0"</span>, <span class="vs">r"</span><span class="dv">$</span><span class="er">\</span><span class="vs">pi/2</span><span class="dv">$</span><span class="vs">"</span>, <span class="vs">r"</span><span class="dv">$</span><span class="er">\</span><span class="vs">pi</span><span class="dv">$</span><span class="vs">"</span>])</span>
+<span id="cb13-8"><a href="#cb13-8" aria-hidden="true" tabindex="-1"></a>ax.set_title(<span class="vs">r"</span><span class="dv">$\s</span><span class="vs">in</span><span class="dv">^</span><span class="vs">2 x = </span><span class="ch">\f</span><span class="vs">rac</span><span class="op">{1}{2}</span><span class="vs"> - </span><span class="ch">\f</span><span class="vs">rac</span><span class="op">{1}{2}</span><span class="er">\</span><span class="vs">cos 2x</span><span class="dv">$</span><span class="vs">: the shaded parts above and below </span><span class="dv">$</span><span class="ch">\f</span><span class="vs">rac</span><span class="op">{1}{2}</span><span class="dv">$</span><span class="vs"> cancel"</span>)</span>
+<span id="cb13-9"><a href="#cb13-9" aria-hidden="true" tabindex="-1"></a>ax.legend(loc<span class="op">=</span><span class="st">"lower right"</span>)</span>
+<span id="cb13-10"><a href="#cb13-10" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="trigonometric_integrals_files/figure-html/cell-9-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+<section id="example-4-displaystyleintsin4-xdx" class="level3">
+<h3 class="anchored" data-anchor-id="example-4-displaystyleintsin4-xdx">Example 4: <span class="math inline">\(\displaystyle\int\sin^4 x\,dx\)</span></h3>
+<p>Use the half-angle identity, then use it <strong>again</strong> on <span class="math inline">\(\cos^2 2x = \tfrac12(1 + \cos 4x)\)</span>: <span class="math display">\[\begin{aligned}
+\int\sin^4 x\,dx &amp;= \int\Big(\frac{1 - \cos 2x}{2}\Big)^2dx = \tfrac14\int(1 - 2\cos 2x + \cos^2 2x)\,dx\\
+&amp;= \tfrac14\int\Big(\tfrac32 - 2\cos 2x + \tfrac12\cos 4x\Big)dx\\
+&amp;= \tfrac38x - \tfrac14\sin 2x + \tfrac1{32}\sin 4x + C.
+\end{aligned}\]</span></p>
+<p>In §7.1 we got <span class="math inline">\(\int\sin^4 x\,dx\)</span> from the reduction formula. The answer looked different there, but the two antiderivatives have the same derivative:</p>
+<div id="e1c7c0f2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.464957Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.464903Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.499614Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.499212Z&quot;}}" data-execution_count="9">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb14"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb14-1"><a href="#cb14-1" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> sp.Rational(<span class="dv">3</span>, <span class="dv">8</span>) <span class="op">*</span> x <span class="op">-</span> sp.sin(<span class="dv">2</span> <span class="op">*</span> x) <span class="op">/</span> <span class="dv">4</span> <span class="op">+</span> sp.sin(<span class="dv">4</span> <span class="op">*</span> x) <span class="op">/</span> <span class="dv">32</span></span>
+<span id="cb14-2"><a href="#cb14-2" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int</span><span class="dv">\s</span><span class="vs">in</span><span class="dv">^</span><span class="vs">4x</span><span class="ch">\,</span><span class="vs">dx = "</span> <span class="op">+</span> sp.latex(F) <span class="op">+</span> <span class="st">" + C"</span>))</span>
+<span id="cb14-3"><a href="#cb14-3" aria-hidden="true" tabindex="-1"></a>check(F, sp.sin(x)<span class="op">**</span><span class="dv">4</span>)</span>
+<span id="cb14-4"><a href="#cb14-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb14-5"><a href="#cb14-5" aria-hidden="true" tabindex="-1"></a><span class="co"># §7.1 reduction formula result: -1/4 cos x sin^3 x - 3/8 cos x sin x + 3/8 x</span></span>
+<span id="cb14-6"><a href="#cb14-6" aria-hidden="true" tabindex="-1"></a>F_reduction <span class="op">=</span> <span class="op">-</span>sp.cos(x) <span class="op">*</span> sp.sin(x)<span class="op">**</span><span class="dv">3</span> <span class="op">/</span> <span class="dv">4</span> <span class="op">-</span> sp.Rational(<span class="dv">3</span>, <span class="dv">8</span>) <span class="op">*</span> sp.cos(x) <span class="op">*</span> sp.sin(x) <span class="op">+</span> sp.Rational(<span class="dv">3</span>, <span class="dv">8</span>) <span class="op">*</span> x</span>
+<span id="cb14-7"><a href="#cb14-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"Half-angle answer - reduction answer ="</span>, sp.simplify(F <span class="op">-</span> F_reduction))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int\sin^4x\,dx = \frac{3 x}{8} - \frac{\sin{\left(2 x \right)}}{4} + \frac{\sin{\left(4 x \right)}}{32} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True
+Half-angle answer - reduction answer = 0</code></pre>
+</div>
+</div>
+</section>
+<section id="the-strategy-when-both-powers-are-even" class="level3">
+<h3 class="anchored" data-anchor-id="the-strategy-when-both-powers-are-even">The strategy when both powers are even</h3>
+<p>Use the half-angle identities <span class="math display">\[\sin^2 x = \tfrac12(1 - \cos 2x),\qquad \cos^2 x = \tfrac12(1 + \cos 2x),\]</span> and sometimes <span class="math inline">\(\sin x\cos x = \tfrac12\sin 2x\)</span>. Repeat as needed: each step halves the powers and doubles the angle.</p>
+<p>For example, <span class="math inline">\(\int\sin^2 x\cos^2 x\,dx = \int\big(\tfrac12\sin 2x\big)^2dx = \tfrac18\int(1 - \cos 4x)\,dx = \tfrac18x - \tfrac1{32}\sin 4x + C\)</span>:</p>
+<div id="8af762db" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.500594Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.500542Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.516638Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.516313Z&quot;}}" data-execution_count="10">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb16"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb16-1"><a href="#cb16-1" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> x <span class="op">/</span> <span class="dv">8</span> <span class="op">-</span> sp.sin(<span class="dv">4</span> <span class="op">*</span> x) <span class="op">/</span> <span class="dv">32</span></span>
+<span id="cb16-2"><a href="#cb16-2" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int</span><span class="dv">\s</span><span class="vs">in</span><span class="dv">^</span><span class="vs">2x</span><span class="er">\</span><span class="vs">cos</span><span class="dv">^</span><span class="vs">2x</span><span class="ch">\,</span><span class="vs">dx = "</span> <span class="op">+</span> sp.latex(F) <span class="op">+</span> <span class="st">" + C"</span>))</span>
+<span id="cb16-3"><a href="#cb16-3" aria-hidden="true" tabindex="-1"></a>check(F, sp.sin(x)<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> sp.cos(x)<span class="op">**</span><span class="dv">2</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int\sin^2x\cos^2x\,dx = \frac{x}{8} - \frac{\sin{\left(4 x \right)}}{32} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="powers-of-tangent-and-secant-displaystyleinttanm-xsecn-xdx" class="level2">
+<h2 class="anchored" data-anchor-id="powers-of-tangent-and-secant-displaystyleinttanm-xsecn-xdx">3. Powers of tangent and secant: <span class="math inline">\(\displaystyle\int\tan^m x\sec^n x\,dx\)</span></h2>
+<p>The same idea works here, using the two derivatives <span class="math display">\[\frac{d}{dx}\tan x = \sec^2 x,\qquad \frac{d}{dx}\sec x = \sec x\tan x.\]</span></p>
+<section id="example-5-displaystyleinttan6-xsec4-xdx" class="level3">
+<h3 class="anchored" data-anchor-id="example-5-displaystyleinttan6-xsec4-xdx">Example 5: <span class="math inline">\(\displaystyle\int\tan^6 x\sec^4 x\,dx\)</span></h3>
+<p>Save <span class="math inline">\(\sec^2 x\)</span> for <span class="math inline">\(du\)</span> (with <span class="math inline">\(u = \tan x\)</span>) and convert the remaining <span class="math inline">\(\sec^2 x\)</span> with <span class="math inline">\(\sec^2 x = 1 + \tan^2 x\)</span>: <span class="math display">\[\int\tan^6 x\sec^4 x\,dx = \int\tan^6 x\,(1 + \tan^2 x)\sec^2 x\,dx = \int u^6(1 + u^2)\,du = \frac{\tan^7 x}{7} + \frac{\tan^9 x}{9} + C.\]</span></p>
+<div id="a4f7ed6a" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.517564Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.517505Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.535620Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.535367Z&quot;}}" data-execution_count="11">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb18"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb18-1"><a href="#cb18-1" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> sp.integrate(sp.expand(u<span class="op">**</span><span class="dv">6</span> <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> u<span class="op">**</span><span class="dv">2</span>)), u)</span>
+<span id="cb18-2"><a href="#cb18-2" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> G.subs(u, sp.tan(x))</span>
+<span id="cb18-3"><a href="#cb18-3" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int</span><span class="ch">\t</span><span class="vs">an</span><span class="dv">^</span><span class="vs">6x</span><span class="dv">\s</span><span class="vs">ec</span><span class="dv">^</span><span class="vs">4x</span><span class="ch">\,</span><span class="vs">dx = "</span> <span class="op">+</span> sp.latex(F) <span class="op">+</span> <span class="st">" + C"</span>))</span>
+<span id="cb18-4"><a href="#cb18-4" aria-hidden="true" tabindex="-1"></a>check(F, sp.tan(x)<span class="op">**</span><span class="dv">6</span> <span class="op">*</span> sp.sec(x)<span class="op">**</span><span class="dv">4</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int\tan^6x\sec^4x\,dx = \frac{\tan^{9}{\left(x \right)}}{9} + \frac{\tan^{7}{\left(x \right)}}{7} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+</div>
+</section>
+<section id="example-6-displaystyleinttan5thetasec7thetadtheta" class="level3">
+<h3 class="anchored" data-anchor-id="example-6-displaystyleinttan5thetasec7thetadtheta">Example 6: <span class="math inline">\(\displaystyle\int\tan^5\theta\sec^7\theta\,d\theta\)</span></h3>
+<p>Now the power of secant is odd, so we can’t save <span class="math inline">\(\sec^2\theta\)</span> and still convert the rest. The power of <strong>tangent</strong> is odd, so save <span class="math inline">\(\sec\theta\tan\theta\)</span> for <span class="math inline">\(du\)</span> (with <span class="math inline">\(u = \sec\theta\)</span>) and convert the remaining <span class="math inline">\(\tan^4\theta\)</span> with <span class="math inline">\(\tan^2\theta = \sec^2\theta - 1\)</span>: <span class="math display">\[\begin{aligned}
+\int\tan^5\theta\sec^7\theta\,d\theta &amp;= \int(\sec^2\theta - 1)^2\sec^6\theta\cdot\sec\theta\tan\theta\,d\theta = \int(u^2 - 1)^2u^6\,du\\
+&amp;= \frac{\sec^{11}\theta}{11} - \frac{2\sec^9\theta}{9} + \frac{\sec^7\theta}{7} + C.
+\end{aligned}\]</span></p>
+<div id="4ff396c2" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.536610Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.536560Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.568879Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.568533Z&quot;}}" data-execution_count="12">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb20"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb20-1"><a href="#cb20-1" aria-hidden="true" tabindex="-1"></a>G <span class="op">=</span> sp.integrate(sp.expand((u<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span>)<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> u<span class="op">**</span><span class="dv">6</span>), u)</span>
+<span id="cb20-2"><a href="#cb20-2" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> G.subs(u, sp.sec(x))</span>
+<span id="cb20-3"><a href="#cb20-3" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int</span><span class="ch">\t</span><span class="vs">an</span><span class="dv">^</span><span class="vs">5</span><span class="ch">\t</span><span class="vs">heta</span><span class="dv">\s</span><span class="vs">ec</span><span class="dv">^</span><span class="vs">7</span><span class="ch">\t</span><span class="vs">heta</span><span class="ch">\,</span><span class="vs">d</span><span class="ch">\t</span><span class="vs">heta = "</span> <span class="op">+</span> sp.latex(F.subs(x, sp.Symbol(<span class="st">"theta"</span>))) <span class="op">+</span> <span class="st">" + C"</span>))</span>
+<span id="cb20-4"><a href="#cb20-4" aria-hidden="true" tabindex="-1"></a>check(F, sp.tan(x)<span class="op">**</span><span class="dv">5</span> <span class="op">*</span> sp.sec(x)<span class="op">**</span><span class="dv">7</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int\tan^5\theta\sec^7\theta\,d\theta = \frac{\sec^{11}{\left(\theta \right)}}{11} - \frac{2 \sec^{9}{\left(\theta \right)}}{9} + \frac{\sec^{7}{\left(\theta \right)}}{7} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+</div>
+</section>
+<section id="the-strategy-for-tanm-xsecn-x" class="level3">
+<h3 class="anchored" data-anchor-id="the-strategy-for-tanm-xsecn-x">The strategy for <span class="math inline">\(\tan^m x\sec^n x\)</span></h3>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+<col style="width: 25%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Case</th>
+<th>Save</th>
+<th>Convert the rest with</th>
+<th>Substitute</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>power of <span class="math inline">\(\sec\)</span> is <strong>even</strong> (<span class="math inline">\(n \ge 2\)</span>)</td>
+<td><span class="math inline">\(\sec^2 x\)</span></td>
+<td><span class="math inline">\(\sec^2 x = 1 + \tan^2 x\)</span></td>
+<td><span class="math inline">\(u = \tan x\)</span></td>
+</tr>
+<tr class="even">
+<td>power of <span class="math inline">\(\tan\)</span> is <strong>odd</strong></td>
+<td><span class="math inline">\(\sec x\tan x\)</span></td>
+<td><span class="math inline">\(\tan^2 x = \sec^2 x - 1\)</span></td>
+<td><span class="math inline">\(u = \sec x\)</span></td>
+</tr>
+</tbody>
+</table>
+<p>The same rules work for <span class="math inline">\(\cot^m x\csc^n x\)</span>, using <span class="math inline">\(\frac{d}{dx}\cot x = -\csc^2 x\)</span>, <span class="math inline">\(\frac{d}{dx}\csc x = -\csc x\cot x\)</span> and <span class="math inline">\(1 + \cot^2 x = \csc^2 x\)</span>.</p>
+<div id="59bacbe8" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.570052Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.570006Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.598162Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.597876Z&quot;}}" data-execution_count="13">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb22"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb22-1"><a href="#cb22-1" aria-hidden="true" tabindex="-1"></a><span class="kw">def</span> tan_sec(m, n):</span>
+<span id="cb22-2"><a href="#cb22-2" aria-hidden="true" tabindex="-1"></a>    <span class="co"># ∫ tan^m x sec^n x dx when sec power is even (n &gt;= 2) or tan power is odd</span></span>
+<span id="cb22-3"><a href="#cb22-3" aria-hidden="true" tabindex="-1"></a>    <span class="cf">if</span> n <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">0</span> <span class="kw">and</span> n <span class="op">&gt;=</span> <span class="dv">2</span>:            <span class="co"># save sec^2 x, u = tan x</span></span>
+<span id="cb22-4"><a href="#cb22-4" aria-hidden="true" tabindex="-1"></a>        sub, g <span class="op">=</span> sp.tan(x), u<span class="op">**</span>m <span class="op">*</span> (<span class="dv">1</span> <span class="op">+</span> u<span class="op">**</span><span class="dv">2</span>)<span class="op">**</span>((n <span class="op">-</span> <span class="dv">2</span>) <span class="op">//</span> <span class="dv">2</span>)</span>
+<span id="cb22-5"><a href="#cb22-5" aria-hidden="true" tabindex="-1"></a>    <span class="cf">elif</span> m <span class="op">%</span> <span class="dv">2</span> <span class="op">==</span> <span class="dv">1</span> <span class="kw">and</span> n <span class="op">&gt;=</span> <span class="dv">1</span>:          <span class="co"># save sec x tan x, u = sec x</span></span>
+<span id="cb22-6"><a href="#cb22-6" aria-hidden="true" tabindex="-1"></a>        sub, g <span class="op">=</span> sp.sec(x), (u<span class="op">**</span><span class="dv">2</span> <span class="op">-</span> <span class="dv">1</span>)<span class="op">**</span>((m <span class="op">-</span> <span class="dv">1</span>) <span class="op">//</span> <span class="dv">2</span>) <span class="op">*</span> u<span class="op">**</span>(n <span class="op">-</span> <span class="dv">1</span>)</span>
+<span id="cb22-7"><a href="#cb22-7" aria-hidden="true" tabindex="-1"></a>    <span class="cf">else</span>:</span>
+<span id="cb22-8"><a href="#cb22-8" aria-hidden="true" tabindex="-1"></a>        <span class="cf">raise</span> <span class="pp">ValueError</span>(<span class="st">"no direct substitution: use identities and/or integration by parts"</span>)</span>
+<span id="cb22-9"><a href="#cb22-9" aria-hidden="true" tabindex="-1"></a>    G <span class="op">=</span> sp.integrate(sp.expand(g), u)</span>
+<span id="cb22-10"><a href="#cb22-10" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> G.subs(u, sub)</span>
+<span id="cb22-11"><a href="#cb22-11" aria-hidden="true" tabindex="-1"></a>    display(Math(</span>
+<span id="cb22-12"><a href="#cb22-12" aria-hidden="true" tabindex="-1"></a>        <span class="vs">rf"u = </span><span class="sc">{</span>sp<span class="sc">.</span>latex(sub)<span class="sc">}</span><span class="vs">:</span><span class="er">\</span><span class="vs">quad </span><span class="er">\</span><span class="vs">int </span><span class="ch">\t</span><span class="vs">an</span><span class="dv">^</span><span class="ch">{{</span><span class="sc">{</span>m<span class="sc">}</span><span class="ch">}}</span><span class="vs">x</span><span class="dv">\s</span><span class="vs">ec</span><span class="dv">^</span><span class="ch">{{</span><span class="sc">{</span>n<span class="sc">}</span><span class="ch">}}</span><span class="vs">x</span><span class="ch">\,</span><span class="vs">dx = </span><span class="er">\</span><span class="vs">int </span><span class="sc">{</span>sp<span class="sc">.</span>latex(sp.factor(g))<span class="sc">}</span><span class="ch">\,</span><span class="vs">du"</span></span>
+<span id="cb22-13"><a href="#cb22-13" aria-hidden="true" tabindex="-1"></a>        <span class="vs">rf" = </span><span class="sc">{</span>sp<span class="sc">.</span>latex(F)<span class="sc">}</span><span class="vs"> </span><span class="op">+</span><span class="vs"> C"</span></span>
+<span id="cb22-14"><a href="#cb22-14" aria-hidden="true" tabindex="-1"></a>    ))</span>
+<span id="cb22-15"><a href="#cb22-15" aria-hidden="true" tabindex="-1"></a>    <span class="cf">return</span> F</span>
+<span id="cb22-16"><a href="#cb22-16" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb22-17"><a href="#cb22-17" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> tan_sec(<span class="dv">2</span>, <span class="dv">4</span>)</span>
+<span id="cb22-18"><a href="#cb22-18" aria-hidden="true" tabindex="-1"></a>check(F, sp.tan(x)<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> sp.sec(x)<span class="op">**</span><span class="dv">4</span>)<span class="op">;</span></span>
+<span id="cb22-19"><a href="#cb22-19" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> tan_sec(<span class="dv">3</span>, <span class="dv">3</span>)</span>
+<span id="cb22-20"><a href="#cb22-20" aria-hidden="true" tabindex="-1"></a>check(F, sp.tan(x)<span class="op">**</span><span class="dv">3</span> <span class="op">*</span> sp.sec(x)<span class="op">**</span><span class="dv">3</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle u = \tan{\left(x \right)}:\quad \int \tan^{2}x\sec^{4}x\,dx = \int u^{2} \left(u^{2} + 1\right)\,du = \frac{\tan^{5}{\left(x \right)}}{5} + \frac{\tan^{3}{\left(x \right)}}{3} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle u = \sec{\left(x \right)}:\quad \int \tan^{3}x\sec^{3}x\,dx = \int u^{2} \left(u - 1\right) \left(u + 1\right)\,du = \frac{\sec^{5}{\left(x \right)}}{5} - \frac{\sec^{3}{\left(x \right)}}{3} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+</div>
+</section>
+<section id="the-other-cases-inttan-xdx-and-intsec-xdx" class="level3">
+<h3 class="anchored" data-anchor-id="the-other-cases-inttan-xdx-and-intsec-xdx">The other cases: <span class="math inline">\(\int\tan x\,dx\)</span> and <span class="math inline">\(\int\sec x\,dx\)</span></h3>
+<p>If the power of tangent is even and the power of secant is odd, neither rule applies. We need two basic integrals.</p>
+<p><strong>Tangent.</strong> Write <span class="math inline">\(\tan x = \dfrac{\sin x}{\cos x}\)</span> and substitute <span class="math inline">\(u = \cos x\)</span>: <span class="math display">\[\int\tan x\,dx = -\int\frac{du}{u} = -\ln|\cos x| + C = \ln|\sec x| + C.\]</span></p>
+<p><strong>Secant.</strong> Multiply top and bottom by <span class="math inline">\(\sec x + \tan x\)</span>. The new numerator is the derivative of the denominator: <span class="math display">\[\int\sec x\,dx = \int\frac{\sec^2 x + \sec x\tan x}{\sec x + \tan x}\,dx = \ln|\sec x + \tan x| + C.\]</span></p>
+<p>(In the code we drop the absolute values. That doesn’t change the derivative.)</p>
+<div id="ca4c8484" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.599136Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.599083Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.614164Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.613822Z&quot;}}" data-execution_count="14">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb25"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb25-1"><a href="#cb25-1" aria-hidden="true" tabindex="-1"></a>F_tan <span class="op">=</span> sp.log(sp.sec(x))</span>
+<span id="cb25-2"><a href="#cb25-2" aria-hidden="true" tabindex="-1"></a>F_sec <span class="op">=</span> sp.log(sp.sec(x) <span class="op">+</span> sp.tan(x))</span>
+<span id="cb25-3"><a href="#cb25-3" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int</span><span class="ch">\t</span><span class="vs">an x</span><span class="ch">\,</span><span class="vs">dx = "</span> <span class="op">+</span> sp.latex(F_tan) <span class="op">+</span> <span class="st">" + C"</span>))</span>
+<span id="cb25-4"><a href="#cb25-4" aria-hidden="true" tabindex="-1"></a>check(F_tan, sp.tan(x))</span>
+<span id="cb25-5"><a href="#cb25-5" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int</span><span class="dv">\s</span><span class="vs">ec x</span><span class="ch">\,</span><span class="vs">dx = "</span> <span class="op">+</span> sp.latex(F_sec) <span class="op">+</span> <span class="st">" + C"</span>))</span>
+<span id="cb25-6"><a href="#cb25-6" aria-hidden="true" tabindex="-1"></a>check(F_sec, sp.sec(x))<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int\tan x\,dx = \log{\left(\sec{\left(x \right)} \right)} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int\sec x\,dx = \log{\left(\tan{\left(x \right)} + \sec{\left(x \right)} \right)} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+</div>
+</section>
+<section id="example-7-displaystyleinttan3-xdx" class="level3">
+<h3 class="anchored" data-anchor-id="example-7-displaystyleinttan3-xdx">Example 7: <span class="math inline">\(\displaystyle\int\tan^3 x\,dx\)</span></h3>
+<p>The power of tangent is odd, but there is no <span class="math inline">\(\sec x\)</span> to save. Instead, convert <span class="math inline">\(\tan^2 x = \sec^2 x - 1\)</span> and split: <span class="math display">\[\int\tan^3 x\,dx = \int\tan x\,(\sec^2 x - 1)\,dx = \int\tan x\sec^2 x\,dx - \int\tan x\,dx = \frac{\tan^2 x}{2} - \ln|\sec x| + C.\]</span> The first integral uses <span class="math inline">\(u = \tan x\)</span>.</p>
+<div id="c7d6170e" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.615085Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.615036Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.620403Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.620071Z&quot;}}" data-execution_count="15">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb28"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb28-1"><a href="#cb28-1" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> sp.tan(x)<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> <span class="dv">2</span> <span class="op">-</span> sp.log(sp.sec(x))</span>
+<span id="cb28-2"><a href="#cb28-2" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int</span><span class="ch">\t</span><span class="vs">an</span><span class="dv">^</span><span class="vs">3x</span><span class="ch">\,</span><span class="vs">dx = "</span> <span class="op">+</span> sp.latex(F) <span class="op">+</span> <span class="st">" + C"</span>))</span>
+<span id="cb28-3"><a href="#cb28-3" aria-hidden="true" tabindex="-1"></a>check(F, sp.tan(x)<span class="op">**</span><span class="dv">3</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int\tan^3x\,dx = - \log{\left(\sec{\left(x \right)} \right)} + \frac{\tan^{2}{\left(x \right)}}{2} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+</div>
+</section>
+<section id="example-8-displaystyleintsec3-xdx-integration-by-parts" class="level3">
+<h3 class="anchored" data-anchor-id="example-8-displaystyleintsec3-xdx-integration-by-parts">Example 8: <span class="math inline">\(\displaystyle\int\sec^3 x\,dx\)</span> (integration by parts)</h3>
+<p>Odd powers of secant alone need integration by parts. This is the cyclic case from §7.1. Take <span class="math display">\[u = \sec x,\quad dv = \sec^2 x\,dx\quad\Longrightarrow\quad du = \sec x\tan x\,dx,\quad v = \tan x.\]</span> Then, with <span class="math inline">\(\tan^2 x = \sec^2 x - 1\)</span>: <span class="math display">\[\begin{aligned}
+\int\sec^3 x\,dx &amp;= \sec x\tan x - \int\sec x\tan^2 x\,dx\\
+&amp;= \sec x\tan x - \int\sec^3 x\,dx + \int\sec x\,dx.
+\end{aligned}\]</span> <span class="math inline">\(\int\sec^3 x\,dx\)</span> appears on both sides. Solve for it: <span class="math display">\[\boxed{\int\sec^3 x\,dx = \tfrac12\big(\sec x\tan x + \ln|\sec x + \tan x|\big) + C}\]</span></p>
+<p><strong>In SymPy</strong>, treat <span class="math inline">\(I = \int\sec^3 x\,dx\)</span> as an unknown, as in §7.1:</p>
+<div id="39c35b53" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.621477Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.621413Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.851863Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.851295Z&quot;}}" data-execution_count="16">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb30"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb30-1"><a href="#cb30-1" aria-hidden="true" tabindex="-1"></a>I <span class="op">=</span> sp.Symbol(<span class="st">"I"</span>)</span>
+<span id="cb30-2"><a href="#cb30-2" aria-hidden="true" tabindex="-1"></a>equation <span class="op">=</span> sp.Eq(I, sp.sec(x) <span class="op">*</span> sp.tan(x) <span class="op">-</span> I <span class="op">+</span> F_sec)</span>
+<span id="cb30-3"><a href="#cb30-3" aria-hidden="true" tabindex="-1"></a>display(equation)</span>
+<span id="cb30-4"><a href="#cb30-4" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> sp.solve(equation, I)[<span class="dv">0</span>]</span>
+<span id="cb30-5"><a href="#cb30-5" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int</span><span class="dv">\s</span><span class="vs">ec</span><span class="dv">^</span><span class="vs">3x</span><span class="ch">\,</span><span class="vs">dx = "</span> <span class="op">+</span> sp.latex(F) <span class="op">+</span> <span class="st">" + C"</span>))</span>
+<span id="cb30-6"><a href="#cb30-6" aria-hidden="true" tabindex="-1"></a>check(F, sp.sec(x)<span class="op">**</span><span class="dv">3</span>)<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle I = - I + \log{\left(\tan{\left(x \right)} + \sec{\left(x \right)} \right)} + \tan{\left(x \right)} \sec{\left(x \right)}\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int\sec^3x\,dx = \frac{\log{\left(\tan{\left(x \right)} + \sec{\left(x \right)} \right)}}{2} + \frac{\tan{\left(x \right)} \sec{\left(x \right)}}{2} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+</div>
+</section>
+</section>
+<section id="products-with-different-angles" class="level2">
+<h2 class="anchored" data-anchor-id="products-with-different-angles">4. Products with different angles</h2>
+<p>Integrals like <span class="math inline">\(\int\sin 4x\cos 5x\,dx\)</span> show up in Fourier series. Use the <strong>product-to-sum</strong> identities: <span class="math display">\[\begin{aligned}
+\sin A\cos B &amp;= \tfrac12\big[\sin(A - B) + \sin(A + B)\big]\\
+\sin A\sin B &amp;= \tfrac12\big[\cos(A - B) - \cos(A + B)\big]\\
+\cos A\cos B &amp;= \tfrac12\big[\cos(A - B) + \cos(A + B)\big]
+\end{aligned}\]</span> Each one comes from adding or subtracting the addition formulas for <span class="math inline">\(\sin(A \pm B)\)</span> or <span class="math inline">\(\cos(A \pm B)\)</span>.</p>
+<div id="d31cfa3f" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.853009Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.852948Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.857941Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.857586Z&quot;}}" data-execution_count="17">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb32"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb32-1"><a href="#cb32-1" aria-hidden="true" tabindex="-1"></a>A, B <span class="op">=</span> sp.symbols(<span class="st">"A B"</span>)</span>
+<span id="cb32-2"><a href="#cb32-2" aria-hidden="true" tabindex="-1"></a>product_to_sum <span class="op">=</span> [</span>
+<span id="cb32-3"><a href="#cb32-3" aria-hidden="true" tabindex="-1"></a>    (sp.sin(A) <span class="op">*</span> sp.cos(B), (sp.sin(A <span class="op">-</span> B) <span class="op">+</span> sp.sin(A <span class="op">+</span> B)) <span class="op">/</span> <span class="dv">2</span>),</span>
+<span id="cb32-4"><a href="#cb32-4" aria-hidden="true" tabindex="-1"></a>    (sp.sin(A) <span class="op">*</span> sp.sin(B), (sp.cos(A <span class="op">-</span> B) <span class="op">-</span> sp.cos(A <span class="op">+</span> B)) <span class="op">/</span> <span class="dv">2</span>),</span>
+<span id="cb32-5"><a href="#cb32-5" aria-hidden="true" tabindex="-1"></a>    (sp.cos(A) <span class="op">*</span> sp.cos(B), (sp.cos(A <span class="op">-</span> B) <span class="op">+</span> sp.cos(A <span class="op">+</span> B)) <span class="op">/</span> <span class="dv">2</span>),</span>
+<span id="cb32-6"><a href="#cb32-6" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb32-7"><a href="#cb32-7" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> lhs, rhs <span class="kw">in</span> product_to_sum:</span>
+<span id="cb32-8"><a href="#cb32-8" aria-hidden="true" tabindex="-1"></a>    ok <span class="op">=</span> sp.simplify(sp.expand_trig(lhs <span class="op">-</span> rhs)) <span class="op">==</span> <span class="dv">0</span></span>
+<span id="cb32-9"><a href="#cb32-9" aria-hidden="true" tabindex="-1"></a>    display(Math(sp.latex(lhs) <span class="op">+</span> <span class="st">" = "</span> <span class="op">+</span> sp.latex(rhs) <span class="op">+</span> <span class="vs">rf"</span><span class="er">\</span><span class="vs">quad</span><span class="ch">\t</span><span class="vs">ext</span><span class="ch">{{</span><span class="vs">: </span><span class="sc">{</span>ok<span class="sc">}</span><span class="ch">}}</span><span class="vs">"</span>))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \sin{\left(A \right)} \cos{\left(B \right)} = \frac{\sin{\left(A - B \right)}}{2} + \frac{\sin{\left(A + B \right)}}{2}\quad\text{: True}\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \sin{\left(A \right)} \sin{\left(B \right)} = \frac{\cos{\left(A - B \right)}}{2} - \frac{\cos{\left(A + B \right)}}{2}\quad\text{: True}\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \cos{\left(A \right)} \cos{\left(B \right)} = \frac{\cos{\left(A - B \right)}}{2} + \frac{\cos{\left(A + B \right)}}{2}\quad\text{: True}\)</span></p>
+</div>
+</div>
+<section id="example-9-displaystyleintsin-4xcos-5xdx" class="level3">
+<h3 class="anchored" data-anchor-id="example-9-displaystyleintsin-4xcos-5xdx">Example 9: <span class="math inline">\(\displaystyle\int\sin 4x\cos 5x\,dx\)</span></h3>
+<p>With <span class="math inline">\(A = 4x\)</span>, <span class="math inline">\(B = 5x\)</span>: <span class="math display">\[\sin 4x\cos 5x = \tfrac12\big[\sin(-x) + \sin 9x\big] = \tfrac12(-\sin x + \sin 9x),\]</span> so <span class="math display">\[\int\sin 4x\cos 5x\,dx = \tfrac12\Big(\cos x - \tfrac19\cos 9x\Big) + C.\]</span></p>
+<div id="cc7015fe" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.858944Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.858876Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:46.886713Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:46.886331Z&quot;}}" data-execution_count="18">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb33"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb33-1"><a href="#cb33-1" aria-hidden="true" tabindex="-1"></a>F <span class="op">=</span> (sp.cos(x) <span class="op">-</span> sp.cos(<span class="dv">9</span> <span class="op">*</span> x) <span class="op">/</span> <span class="dv">9</span>) <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb33-2"><a href="#cb33-2" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int</span><span class="dv">\s</span><span class="vs">in 4x</span><span class="er">\</span><span class="vs">cos 5x</span><span class="ch">\,</span><span class="vs">dx = "</span> <span class="op">+</span> sp.latex(F) <span class="op">+</span> <span class="st">" + C"</span>))</span>
+<span id="cb33-3"><a href="#cb33-3" aria-hidden="true" tabindex="-1"></a>check(F, sp.sin(<span class="dv">4</span> <span class="op">*</span> x) <span class="op">*</span> sp.cos(<span class="dv">5</span> <span class="op">*</span> x))<span class="op">;</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int\sin 4x\cos 5x\,dx = \frac{\cos{\left(x \right)}}{2} - \frac{\cos{\left(9 x \right)}}{18} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True</code></pre>
+</div>
+</div>
+</section>
+<section id="application-orthogonality" class="level3">
+<h3 class="anchored" data-anchor-id="application-orthogonality">Application: orthogonality</h3>
+<p>For positive integers <span class="math inline">\(m\)</span> and <span class="math inline">\(n\)</span>, the product-to-sum identities give <span class="math display">\[\int_{-\pi}^{\pi}\sin mx\sin nx\,dx = \begin{cases}0 &amp; m \ne n\\ \pi &amp; m = n\end{cases}\]</span> When <span class="math inline">\(m \ne n\)</span>, both <span class="math inline">\(\cos(m - n)x\)</span> and <span class="math inline">\(\cos(m + n)x\)</span> go through whole periods on <span class="math inline">\([-\pi, \pi]\)</span>, so their integrals are <span class="math inline">\(0\)</span>. When <span class="math inline">\(m = n\)</span>, <span class="math inline">\(\cos(m - n)x = 1\)</span> contributes <span class="math inline">\(\tfrac12\cdot 2\pi = \pi\)</span>.</p>
+<p>This fact is the basis of Fourier series. Here is the table of values for <span class="math inline">\(m, n = 1, \dots, 5\)</span>, computed both ways:</p>
+<div id="3b906fc5" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:46.887778Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:46.887723Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:47.233531Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:47.233131Z&quot;}}" data-execution_count="19">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb35"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb35-1"><a href="#cb35-1" aria-hidden="true" tabindex="-1"></a>N <span class="op">=</span> <span class="dv">5</span></span>
+<span id="cb35-2"><a href="#cb35-2" aria-hidden="true" tabindex="-1"></a>exact <span class="op">=</span> sp.Matrix(N, N, <span class="kw">lambda</span> i, j: sp.integrate(sp.sin((i <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span> x) <span class="op">*</span> sp.sin((j <span class="op">+</span> <span class="dv">1</span>) <span class="op">*</span> x), (x, <span class="op">-</span>sp.pi, sp.pi)))</span>
+<span id="cb35-3"><a href="#cb35-3" aria-hidden="true" tabindex="-1"></a>display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">left</span><span class="pp">[</span><span class="er">\</span><span class="pp">int_{-</span><span class="er">\</span><span class="pp">pi}^{</span><span class="er">\</span><span class="pp">pi}</span><span class="dv">\s</span><span class="pp">in mx</span><span class="dv">\s</span><span class="pp">in nx</span><span class="ch">\,</span><span class="pp">dx</span><span class="ch">\r</span><span class="pp">ight]</span><span class="vs">_{m,n=1}</span><span class="dv">^</span><span class="op">{5}</span><span class="vs"> = "</span> <span class="op">+</span> sp.latex(exact)))</span>
+<span id="cb35-4"><a href="#cb35-4" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb35-5"><a href="#cb35-5" aria-hidden="true" tabindex="-1"></a>xs <span class="op">=</span> np.linspace(<span class="op">-</span>np.pi, np.pi, <span class="dv">20_001</span>)</span>
+<span id="cb35-6"><a href="#cb35-6" aria-hidden="true" tabindex="-1"></a>numeric <span class="op">=</span> np.array([[np.trapezoid(np.sin(m <span class="op">*</span> xs) <span class="op">*</span> np.sin(k <span class="op">*</span> xs), xs) <span class="cf">for</span> k <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, N <span class="op">+</span> <span class="dv">1</span>)] <span class="cf">for</span> m <span class="kw">in</span> <span class="bu">range</span>(<span class="dv">1</span>, N <span class="op">+</span> <span class="dv">1</span>)])</span>
+<span id="cb35-7"><a href="#cb35-7" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"NumPy trapezoid (divided by π):"</span>)</span>
+<span id="cb35-8"><a href="#cb35-8" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(np.<span class="bu">round</span>(numeric <span class="op">/</span> np.pi, <span class="dv">8</span>) <span class="op">+</span> <span class="fl">0.0</span>)  <span class="co"># + 0.0 turns -0. into 0.</span></span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \left[\int_{-\pi}^{\pi}\sin mx\sin nx\,dx\right]_{m,n=1}^{5} = \left[\begin{matrix}\pi &amp; 0 &amp; 0 &amp; 0 &amp; 0\\0 &amp; \pi &amp; 0 &amp; 0 &amp; 0\\0 &amp; 0 &amp; \pi &amp; 0 &amp; 0\\0 &amp; 0 &amp; 0 &amp; \pi &amp; 0\\0 &amp; 0 &amp; 0 &amp; 0 &amp; \pi\end{matrix}\right]\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NumPy trapezoid (divided by π):
+[[1. 0. 0. 0. 0.]
+ [0. 1. 0. 0. 0.]
+ [0. 0. 1. 0. 0.]
+ [0. 0. 0. 1. 0.]
+ [0. 0. 0. 0. 1.]]</code></pre>
+</div>
+</div>
+<div id="318fe01b" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:47.234538Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:47.234486Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:47.288315Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:47.287963Z&quot;}}" data-execution_count="20">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb37"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb37-1"><a href="#cb37-1" aria-hidden="true" tabindex="-1"></a>t <span class="op">=</span> np.linspace(<span class="op">-</span>np.pi, np.pi, <span class="dv">800</span>)</span>
+<span id="cb37-2"><a href="#cb37-2" aria-hidden="true" tabindex="-1"></a>fig, axes <span class="op">=</span> plt.subplots(<span class="dv">1</span>, <span class="dv">2</span>, figsize<span class="op">=</span>(<span class="dv">10</span>, <span class="fl">3.5</span>), sharey<span class="op">=</span><span class="va">True</span>)</span>
+<span id="cb37-3"><a href="#cb37-3" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> ax, (m, k) <span class="kw">in</span> <span class="bu">zip</span>(axes, [(<span class="dv">2</span>, <span class="dv">3</span>), (<span class="dv">3</span>, <span class="dv">3</span>)]):</span>
+<span id="cb37-4"><a href="#cb37-4" aria-hidden="true" tabindex="-1"></a>    y <span class="op">=</span> np.sin(m <span class="op">*</span> t) <span class="op">*</span> np.sin(k <span class="op">*</span> t)</span>
+<span id="cb37-5"><a href="#cb37-5" aria-hidden="true" tabindex="-1"></a>    ax.plot(t, y, <span class="st">"k"</span>, lw<span class="op">=</span><span class="fl">1.5</span>)</span>
+<span id="cb37-6"><a href="#cb37-6" aria-hidden="true" tabindex="-1"></a>    ax.fill_between(t, <span class="dv">0</span>, y, where<span class="op">=</span>y <span class="op">&gt;</span> <span class="dv">0</span>, alpha<span class="op">=</span><span class="fl">0.35</span>, color<span class="op">=</span><span class="st">"C0"</span>)</span>
+<span id="cb37-7"><a href="#cb37-7" aria-hidden="true" tabindex="-1"></a>    ax.fill_between(t, <span class="dv">0</span>, y, where<span class="op">=</span>y <span class="op">&lt;</span> <span class="dv">0</span>, alpha<span class="op">=</span><span class="fl">0.35</span>, color<span class="op">=</span><span class="st">"C3"</span>)</span>
+<span id="cb37-8"><a href="#cb37-8" aria-hidden="true" tabindex="-1"></a>    ax.axhline(<span class="dv">0</span>, color<span class="op">=</span><span class="st">"gray"</span>, lw<span class="op">=</span><span class="fl">0.8</span>)</span>
+<span id="cb37-9"><a href="#cb37-9" aria-hidden="true" tabindex="-1"></a>    ax.set_xticks([<span class="op">-</span>np.pi, <span class="dv">0</span>, np.pi], [<span class="vs">r"</span><span class="dv">$</span><span class="vs">-</span><span class="er">\</span><span class="vs">pi</span><span class="dv">$</span><span class="vs">"</span>, <span class="st">"0"</span>, <span class="vs">r"</span><span class="dv">$</span><span class="er">\</span><span class="vs">pi</span><span class="dv">$</span><span class="vs">"</span>])</span>
+<span id="cb37-10"><a href="#cb37-10" aria-hidden="true" tabindex="-1"></a>    ax.set_title(<span class="vs">rf"</span><span class="dv">$\s</span><span class="vs">in </span><span class="sc">{</span>m<span class="sc">}</span><span class="vs">x</span><span class="ch">\,</span><span class="dv">\s</span><span class="vs">in </span><span class="sc">{</span>k<span class="sc">}</span><span class="vs">x</span><span class="dv">$</span><span class="vs">:  integral </span><span class="dv">$</span><span class="vs">= </span><span class="sc">{</span>np<span class="sc">.</span>trapezoid(y, t) <span class="op">/</span> np<span class="sc">.</span>pi<span class="sc">:.0f}</span><span class="er">\</span><span class="vs">pi</span><span class="dv">$</span><span class="vs">"</span>)</span>
+<span id="cb37-11"><a href="#cb37-11" aria-hidden="true" tabindex="-1"></a>plt.tight_layout()</span>
+<span id="cb37-12"><a href="#cb37-12" aria-hidden="true" tabindex="-1"></a>plt.show()</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display">
+<div>
+<figure class="figure">
+<p><img src="trigonometric_integrals_files/figure-html/cell-21-output-1.png" class="img-fluid figure-img"></p>
+</figure>
+</div>
+</div>
+</div>
+</section>
+</section>
+<section id="common-mistakes" class="level2">
+<h2 class="anchored" data-anchor-id="common-mistakes">5. Common mistakes</h2>
+<ol type="1">
+<li><strong>Saving the wrong factor.</strong> To substitute <span class="math inline">\(u = \sin x\)</span> you must save a <span class="math inline">\(\cos x\)</span>, and the other way around. With <span class="math inline">\(u = \tan x\)</span> save <span class="math inline">\(\sec^2 x\)</span>; with <span class="math inline">\(u = \sec x\)</span> save <span class="math inline">\(\sec x\tan x\)</span>.</li>
+<li><strong>Using <span class="math inline">\(u = \sin x\)</span> when the power of <span class="math inline">\(\cos x\)</span> is even.</strong> The leftover <span class="math inline">\(\cos x\)</span> becomes <span class="math inline">\(\sqrt{1 - u^2}\)</span>. Use the half-angle identities instead.</li>
+<li><strong>Sign errors with <span class="math inline">\(u = \cos x\)</span>:</strong> <span class="math inline">\(du = -\sin x\,dx\)</span>.</li>
+<li><strong>Half-angle identities:</strong> the angle doubles. <span class="math inline">\(\int\cos^2 3x\,dx = \tfrac12\int(1 + \cos 6x)\,dx\)</span>, not <span class="math inline">\(\cos 3x\)</span> or <span class="math inline">\(\cos 2x\)</span>.</li>
+<li><strong>Forgetting the absolute values</strong> in <span class="math inline">\(\ln|\sec x|\)</span> and <span class="math inline">\(\ln|\sec x + \tan x|\)</span>.</li>
+<li><strong>Different-looking answers.</strong> Trig antiderivatives can differ by a constant, such as <span class="math inline">\(\tfrac12\sin^2 x\)</span> and <span class="math inline">\(-\tfrac12\cos^2 x\)</span> for <span class="math inline">\(\int\sin x\cos x\,dx\)</span>. Differentiate to compare them.</li>
+</ol>
+<div id="3ccbe14c" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:47.289541Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:47.289490Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:47.297441Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:47.297071Z&quot;}}" data-execution_count="21">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb38"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb38-1"><a href="#cb38-1" aria-hidden="true" tabindex="-1"></a>F1, F2 <span class="op">=</span> sp.sin(x)<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> <span class="dv">2</span>, <span class="op">-</span>sp.cos(x)<span class="op">**</span><span class="dv">2</span> <span class="op">/</span> <span class="dv">2</span></span>
+<span id="cb38-2"><a href="#cb38-2" aria-hidden="true" tabindex="-1"></a>check(F1, sp.sin(x) <span class="op">*</span> sp.cos(x))</span>
+<span id="cb38-3"><a href="#cb38-3" aria-hidden="true" tabindex="-1"></a>check(F2, sp.sin(x) <span class="op">*</span> sp.cos(x))</span>
+<span id="cb38-4"><a href="#cb38-4" aria-hidden="true" tabindex="-1"></a><span class="bu">print</span>(<span class="st">"F1 - F2 ="</span>, sp.simplify(F1 <span class="op">-</span> F2))</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-stdout">
+<pre><code>d/dx(answer) == integrand: True
+d/dx(answer) == integrand: True
+F1 - F2 = 1/2</code></pre>
+</div>
+</div>
+</section>
+<section id="practice-problems" class="level2">
+<h2 class="anchored" data-anchor-id="practice-problems">6. Practice problems</h2>
+<p>Try each by hand first, then run the cell below to check your answers. SymPy may give an answer that looks different from yours, so differentiate yours and compare.</p>
+<ol type="1">
+<li><span class="math inline">\(\displaystyle\int\sin^3 x\cos^2 x\,dx\)</span></li>
+<li><span class="math inline">\(\displaystyle\int\cos^4 x\,dx\)</span></li>
+<li><span class="math inline">\(\displaystyle\int\tan^2 x\sec^4 x\,dx\)</span></li>
+<li><span class="math inline">\(\displaystyle\int\tan^3 x\sec x\,dx\)</span></li>
+<li><span class="math inline">\(\displaystyle\int\cos 3x\cos 7x\,dx\)</span></li>
+<li><span class="math inline">\(\displaystyle\int_0^{\pi/2}\sin^2 x\cos^2 x\,dx\)</span></li>
+<li><span class="math inline">\(\displaystyle\int_0^{\pi/4}\sec^4 x\,dx\)</span></li>
+</ol>
+<div id="2744ec41" class="cell" data-quarto-private-1="{&quot;key&quot;:&quot;execution&quot;,&quot;value&quot;:{&quot;iopub.execute_input&quot;:&quot;2026-10-14T18:55:47.298491Z&quot;,&quot;iopub.status.busy&quot;:&quot;2026-10-14T18:55:47.298435Z&quot;,&quot;iopub.status.idle&quot;:&quot;2026-10-14T18:55:47.446221Z&quot;,&quot;shell.execute_reply&quot;:&quot;2026-10-14T18:55:47.445761Z&quot;}}" data-execution_count="22">
+<details open="" class="code-fold">
+<summary>Code</summary>
+<div class="code-copy-outer-scaffold"><div class="sourceCode cell-code" id="cb40"><pre class="sourceCode python code-with-copy"><code class="sourceCode python"><span id="cb40-1"><a href="#cb40-1" aria-hidden="true" tabindex="-1"></a>problems <span class="op">=</span> [</span>
+<span id="cb40-2"><a href="#cb40-2" aria-hidden="true" tabindex="-1"></a>    sp.sin(x)<span class="op">**</span><span class="dv">3</span> <span class="op">*</span> sp.cos(x)<span class="op">**</span><span class="dv">2</span>,</span>
+<span id="cb40-3"><a href="#cb40-3" aria-hidden="true" tabindex="-1"></a>    sp.cos(x)<span class="op">**</span><span class="dv">4</span>,</span>
+<span id="cb40-4"><a href="#cb40-4" aria-hidden="true" tabindex="-1"></a>    sp.tan(x)<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> sp.sec(x)<span class="op">**</span><span class="dv">4</span>,</span>
+<span id="cb40-5"><a href="#cb40-5" aria-hidden="true" tabindex="-1"></a>    sp.tan(x)<span class="op">**</span><span class="dv">3</span> <span class="op">*</span> sp.sec(x),</span>
+<span id="cb40-6"><a href="#cb40-6" aria-hidden="true" tabindex="-1"></a>    sp.cos(<span class="dv">3</span> <span class="op">*</span> x) <span class="op">*</span> sp.cos(<span class="dv">7</span> <span class="op">*</span> x),</span>
+<span id="cb40-7"><a href="#cb40-7" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb40-8"><a href="#cb40-8" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p <span class="kw">in</span> problems:</span>
+<span id="cb40-9"><a href="#cb40-9" aria-hidden="true" tabindex="-1"></a>    F <span class="op">=</span> sp.simplify(sp.integrate(p, x))</span>
+<span id="cb40-10"><a href="#cb40-10" aria-hidden="true" tabindex="-1"></a>    display(Math(<span class="vs">r"</span><span class="er">\</span><span class="vs">int "</span> <span class="op">+</span> sp.latex(p) <span class="op">+</span> <span class="vs">r"</span><span class="ch">\,</span><span class="vs">dx = "</span> <span class="op">+</span> sp.latex(F) <span class="op">+</span> <span class="st">" + C"</span>))</span>
+<span id="cb40-11"><a href="#cb40-11" aria-hidden="true" tabindex="-1"></a></span>
+<span id="cb40-12"><a href="#cb40-12" aria-hidden="true" tabindex="-1"></a>definite <span class="op">=</span> [</span>
+<span id="cb40-13"><a href="#cb40-13" aria-hidden="true" tabindex="-1"></a>    (sp.sin(x)<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> sp.cos(x)<span class="op">**</span><span class="dv">2</span>, <span class="dv">0</span>, sp.pi <span class="op">/</span> <span class="dv">2</span>, <span class="kw">lambda</span> t: np.sin(t)<span class="op">**</span><span class="dv">2</span> <span class="op">*</span> np.cos(t)<span class="op">**</span><span class="dv">2</span>),</span>
+<span id="cb40-14"><a href="#cb40-14" aria-hidden="true" tabindex="-1"></a>    (sp.sec(x)<span class="op">**</span><span class="dv">4</span>, <span class="dv">0</span>, sp.pi <span class="op">/</span> <span class="dv">4</span>, <span class="kw">lambda</span> t: <span class="dv">1</span> <span class="op">/</span> np.cos(t)<span class="op">**</span><span class="dv">4</span>),</span>
+<span id="cb40-15"><a href="#cb40-15" aria-hidden="true" tabindex="-1"></a>]</span>
+<span id="cb40-16"><a href="#cb40-16" aria-hidden="true" tabindex="-1"></a><span class="cf">for</span> p, a, b, fn <span class="kw">in</span> definite:</span>
+<span id="cb40-17"><a href="#cb40-17" aria-hidden="true" tabindex="-1"></a>    val <span class="op">=</span> sp.integrate(p, (x, a, b))</span>
+<span id="cb40-18"><a href="#cb40-18" aria-hidden="true" tabindex="-1"></a>    xs <span class="op">=</span> np.linspace(<span class="bu">float</span>(a), <span class="bu">float</span>(b), <span class="dv">100_001</span>)</span>
+<span id="cb40-19"><a href="#cb40-19" aria-hidden="true" tabindex="-1"></a>    display(Math(<span class="vs">rf"</span><span class="er">\</span><span class="vs">int_</span><span class="ch">{{</span><span class="sc">{</span>sp<span class="sc">.</span>latex(a)<span class="sc">}</span><span class="ch">}}</span><span class="dv">^</span><span class="ch">{{</span><span class="sc">{</span>sp<span class="sc">.</span>latex(b)<span class="sc">}</span><span class="ch">}}</span><span class="vs"> "</span> <span class="op">+</span> sp.latex(p) <span class="op">+</span> <span class="vs">r"</span><span class="ch">\,</span><span class="vs">dx = "</span></span>
+<span id="cb40-20"><a href="#cb40-20" aria-hidden="true" tabindex="-1"></a>                 <span class="op">+</span> sp.latex(sp.simplify(val)) <span class="op">+</span> <span class="vs">rf" </span><span class="ch">\a</span><span class="vs">pprox </span><span class="sc">{</span><span class="bu">float</span>(val)<span class="sc">:.6f}</span><span class="vs">"</span>))</span>
+<span id="cb40-21"><a href="#cb40-21" aria-hidden="true" tabindex="-1"></a>    <span class="bu">print</span>(<span class="ss">f"NumPy check: </span><span class="sc">{</span>np<span class="sc">.</span>trapezoid(fn(xs), xs)<span class="sc">:.6f}</span><span class="ss">"</span>)</span></code></pre></div><button title="Copy to Clipboard" class="code-copy-button"><i class="bi"></i></button></div>
+</details>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int \sin^{3}{\left(x \right)} \cos^{2}{\left(x \right)}\,dx = \frac{\cos^{5}{\left(x \right)}}{5} - \frac{\cos^{3}{\left(x \right)}}{3} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int \cos^{4}{\left(x \right)}\,dx = \frac{3 x}{8} + \frac{\sin{\left(2 x \right)}}{4} + \frac{\sin{\left(4 x \right)}}{32} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int \tan^{2}{\left(x \right)} \sec^{4}{\left(x \right)}\,dx = \frac{\sin^{3}{\left(x \right)}}{3 \cos^{5}{\left(x \right)}} - \frac{2 \tan^{5}{\left(x \right)}}{15} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int \tan^{3}{\left(x \right)} \sec{\left(x \right)}\,dx = \frac{-3 + \frac{1}{\cos^{2}{\left(x \right)}}}{3 \cos{\left(x \right)}} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int \cos{\left(3 x \right)} \cos{\left(7 x \right)}\,dx = \frac{\sin{\left(4 x \right)}}{8} + \frac{\sin{\left(10 x \right)}}{20} + C\)</span></p>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int_{0}^{\frac{\pi}{2}} \sin^{2}{\left(x \right)} \cos^{2}{\left(x \right)}\,dx = \frac{\pi}{16} \approx 0.196350\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NumPy check: 0.196350</code></pre>
+</div>
+<div class="cell-output cell-output-display cell-output-markdown">
+<p><span class="math inline">\(\displaystyle \int_{0}^{\frac{\pi}{4}} \sec^{4}{\left(x \right)}\,dx = \frac{4}{3} \approx 1.333333\)</span></p>
+</div>
+<div class="cell-output cell-output-stdout">
+<pre><code>NumPy check: 1.333333</code></pre>
+</div>
+</div>
+</section>
+<section id="summary" class="level2">
+<h2 class="anchored" data-anchor-id="summary">Summary</h2>
+<table class="caption-top table">
+<colgroup>
+<col style="width: 33%">
+<col style="width: 33%">
+<col style="width: 33%">
+</colgroup>
+<thead>
+<tr class="header">
+<th>Integrand</th>
+<th>Strategy</th>
+<th>Substitution</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td><span class="math inline">\(\sin^m x\cos^n x\)</span>, <span class="math inline">\(n\)</span> odd</td>
+<td>Save <span class="math inline">\(\cos x\)</span>, use <span class="math inline">\(\cos^2 x = 1 - \sin^2 x\)</span></td>
+<td><span class="math inline">\(u = \sin x\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\sin^m x\cos^n x\)</span>, <span class="math inline">\(m\)</span> odd</td>
+<td>Save <span class="math inline">\(\sin x\)</span>, use <span class="math inline">\(\sin^2 x = 1 - \cos^2 x\)</span></td>
+<td><span class="math inline">\(u = \cos x\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\sin^m x\cos^n x\)</span>, both even</td>
+<td>Half-angle identities, repeated</td>
+<td>none</td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\tan^m x\sec^n x\)</span>, <span class="math inline">\(n\)</span> even</td>
+<td>Save <span class="math inline">\(\sec^2 x\)</span>, use <span class="math inline">\(\sec^2 x = 1 + \tan^2 x\)</span></td>
+<td><span class="math inline">\(u = \tan x\)</span></td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\tan^m x\sec^n x\)</span>, <span class="math inline">\(m\)</span> odd</td>
+<td>Save <span class="math inline">\(\sec x\tan x\)</span>, use <span class="math inline">\(\tan^2 x = \sec^2 x - 1\)</span></td>
+<td><span class="math inline">\(u = \sec x\)</span></td>
+</tr>
+<tr class="even">
+<td><span class="math inline">\(\tan^m x\)</span> alone, odd <span class="math inline">\(\sec^n x\)</span></td>
+<td><span class="math inline">\(\tan^2 x = \sec^2 x - 1\)</span>; parts for <span class="math inline">\(\sec^3 x\)</span></td>
+<td>varies</td>
+</tr>
+<tr class="odd">
+<td><span class="math inline">\(\sin mx\cos nx\)</span>, etc.</td>
+<td>Product-to-sum identities</td>
+<td>none</td>
+</tr>
+</tbody>
+</table>
+<p><span class="math display">\[\int\tan x\,dx = \ln|\sec x| + C,\qquad \int\sec x\,dx = \ln|\sec x + \tan x| + C\]</span></p>
+
+
+</section>
+
+</main> <!-- /main -->
+<script id="quarto-html-after-body" type="application/javascript">
+  window.document.addEventListener("DOMContentLoaded", function (event) {
+    const icon = "";
+    const anchorJS = new window.AnchorJS();
+    anchorJS.options = {
+      placement: 'right',
+      icon: icon
+    };
+    anchorJS.add('.anchored');
+    const isCodeAnnotation = (el) => {
+      for (const clz of el.classList) {
+        if (clz.startsWith('code-annotation-')) {                     
+          return true;
+        }
+      }
+      return false;
+    }
+    const onCopySuccess = function(e) {
+      // button target
+      const button = e.trigger;
+      // don't keep focus
+      button.blur();
+      // flash "checked"
+      button.classList.add('code-copy-button-checked');
+      var currentTitle = button.getAttribute("title");
+      button.setAttribute("title", "Copied!");
+      let tooltip;
+      if (window.bootstrap) {
+        button.setAttribute("data-bs-toggle", "tooltip");
+        button.setAttribute("data-bs-placement", "left");
+        button.setAttribute("data-bs-title", "Copied!");
+        tooltip = new bootstrap.Tooltip(button, 
+          { trigger: "manual", 
+            customClass: "code-copy-button-tooltip",
+            offset: [0, -8]});
+        tooltip.show();    
+      }
+      setTimeout(function() {
+        if (tooltip) {
+          tooltip.hide();
+          button.removeAttribute("data-bs-title");
+          button.removeAttribute("data-bs-toggle");
+          button.removeAttribute("data-bs-placement");
+        }
+        button.setAttribute("title", currentTitle);
+        button.classList.remove('code-copy-button-checked');
+      }, 1000);
+      // clear code selection
+      e.clearSelection();
+    }
+    const getTextToCopy = function(trigger) {
+      const outerScaffold = trigger.parentElement.cloneNode(true);
+      const codeEl = outerScaffold.querySelector('code');
+      for (const childEl of codeEl.children) {
+        if (isCodeAnnotation(childEl)) {
+          childEl.remove();
+        }
+      }
+      return codeEl.innerText;
+    }
+    const clipboard = new window.ClipboardJS('.code-copy-button:not([data-in-quarto-modal])', {
+      text: getTextToCopy
+    });
+    clipboard.on('success', onCopySuccess);
+    if (window.document.getElementById('quarto-embedded-source-code-modal')) {
+      const clipboardModal = new window.ClipboardJS('.code-copy-button[data-in-quarto-modal]', {
+        text: getTextToCopy,
+        container: window.document.getElementById('quarto-embedded-source-code-modal')
+      });
+      clipboardModal.on('success', onCopySuccess);
+    }
+      var localhostRegex = new RegExp(/^(?:http|https):\/\/localhost\:?[0-9]*\//);
+      var mailtoRegex = new RegExp(/^mailto:/);
+        var filterRegex = new RegExp("https:\/\/mirajcs\.github\.io\/calculus_II\/");
+      var isInternal = (href) => {
+          return filterRegex.test(href) || localhostRegex.test(href) || mailtoRegex.test(href);
+      }
+      // Inspect non-navigation links and adorn them if external
+     var links = window.document.querySelectorAll('a[href]:not(.nav-link):not(.navbar-brand):not(.toc-action):not(.sidebar-link):not(.sidebar-item-toggle):not(.pagination-link):not(.no-external):not([aria-hidden]):not(.dropdown-item):not(.quarto-navigation-tool):not(.about-link)');
+      for (var i=0; i<links.length; i++) {
+        const link = links[i];
+        if (!isInternal(link.href)) {
+          // undo the damage that might have been done by quarto-nav.js in the case of
+          // links that we want to consider external
+          if (link.dataset.originalHref !== undefined) {
+            link.href = link.dataset.originalHref;
+          }
+        }
+      }
+    function tippyHover(el, contentFn, onTriggerFn, onUntriggerFn) {
+      const config = {
+        allowHTML: true,
+        maxWidth: 500,
+        delay: 100,
+        arrow: false,
+        appendTo: function(el) {
+            return el.parentElement;
+        },
+        interactive: true,
+        interactiveBorder: 10,
+        theme: 'quarto',
+        placement: 'bottom-start',
+      };
+      if (contentFn) {
+        config.content = contentFn;
+      }
+      if (onTriggerFn) {
+        config.onTrigger = onTriggerFn;
+      }
+      if (onUntriggerFn) {
+        config.onUntrigger = onUntriggerFn;
+      }
+      window.tippy(el, config); 
+    }
+    const noterefs = window.document.querySelectorAll('a[role="doc-noteref"]');
+    for (var i=0; i<noterefs.length; i++) {
+      const ref = noterefs[i];
+      tippyHover(ref, function() {
+        // use id or data attribute instead here
+        let href = ref.getAttribute('data-footnote-href') || ref.getAttribute('href');
+        try { href = new URL(href).hash; } catch {}
+        const id = href.replace(/^#\/?/, "");
+        const note = window.document.getElementById(id);
+        if (note) {
+          return note.innerHTML;
+        } else {
+          return "";
+        }
+      });
+    }
+    const xrefs = window.document.querySelectorAll('a.quarto-xref');
+    const processXRef = (id, note) => {
+      // Strip column container classes
+      const stripColumnClz = (el) => {
+        el.classList.remove("page-full", "page-columns");
+        if (el.children) {
+          for (const child of el.children) {
+            stripColumnClz(child);
+          }
+        }
+      }
+      stripColumnClz(note)
+      if (id === null || id.startsWith('sec-')) {
+        // Special case sections, only their first couple elements
+        const container = document.createElement("div");
+        if (note.children && note.children.length > 2) {
+          container.appendChild(note.children[0].cloneNode(true));
+          for (let i = 1; i < note.children.length; i++) {
+            const child = note.children[i];
+            if (child.tagName === "P" && child.innerText === "") {
+              continue;
+            } else {
+              container.appendChild(child.cloneNode(true));
+              break;
+            }
+          }
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(container);
+          }
+          return container.innerHTML
+        } else {
+          if (window.Quarto?.typesetMath) {
+            window.Quarto.typesetMath(note);
+          }
+          return note.innerHTML;
+        }
+      } else {
+        // Remove any anchor links if they are present
+        const anchorLink = note.querySelector('a.anchorjs-link');
+        if (anchorLink) {
+          anchorLink.remove();
+        }
+        if (window.Quarto?.typesetMath) {
+          window.Quarto.typesetMath(note);
+        }
+        if (note.classList.contains("callout")) {
+          return note.outerHTML;
+        } else {
+          return note.innerHTML;
+        }
+      }
+    }
+    for (var i=0; i<xrefs.length; i++) {
+      const xref = xrefs[i];
+      tippyHover(xref, undefined, function(instance) {
+        instance.disable();
+        let url = xref.getAttribute('href');
+        let hash = undefined; 
+        if (url.startsWith('#')) {
+          hash = url;
+        } else {
+          try { hash = new URL(url).hash; } catch {}
+        }
+        if (hash) {
+          const id = hash.replace(/^#\/?/, "");
+          const note = window.document.getElementById(id);
+          if (note !== null) {
+            try {
+              const html = processXRef(id, note.cloneNode(true));
+              instance.setContent(html);
+            } finally {
+              instance.enable();
+              instance.show();
+            }
+          } else {
+            // See if we can fetch this
+            fetch(url.split('#')[0])
+            .then(res => res.text())
+            .then(html => {
+              const parser = new DOMParser();
+              const htmlDoc = parser.parseFromString(html, "text/html");
+              const note = htmlDoc.getElementById(id);
+              if (note !== null) {
+                const html = processXRef(id, note);
+                instance.setContent(html);
+              } 
+            }).finally(() => {
+              instance.enable();
+              instance.show();
+            });
+          }
+        } else {
+          // See if we can fetch a full url (with no hash to target)
+          // This is a special case and we should probably do some content thinning / targeting
+          fetch(url)
+          .then(res => res.text())
+          .then(html => {
+            const parser = new DOMParser();
+            const htmlDoc = parser.parseFromString(html, "text/html");
+            const note = htmlDoc.querySelector('main.content');
+            if (note !== null) {
+              // This should only happen for chapter cross references
+              // (since there is no id in the URL)
+              // remove the first header
+              if (note.children.length > 0 && note.children[0].tagName === "HEADER") {
+                note.children[0].remove();
+              }
+              const html = processXRef(null, note);
+              instance.setContent(html);
+            } 
+          }).finally(() => {
+            instance.enable();
+            instance.show();
+          });
+        }
+      }, function(instance) {
+      });
+    }
+        let selectedAnnoteEl;
+        const selectorForAnnotation = ( cell, annotation) => {
+          let cellAttr = 'data-code-cell="' + cell + '"';
+          let lineAttr = 'data-code-annotation="' +  annotation + '"';
+          const selector = 'span[' + cellAttr + '][' + lineAttr + ']';
+          return selector;
+        }
+        const selectCodeLines = (annoteEl) => {
+          const doc = window.document;
+          const targetCell = annoteEl.getAttribute("data-target-cell");
+          const targetAnnotation = annoteEl.getAttribute("data-target-annotation");
+          const annoteSpan = window.document.querySelector(selectorForAnnotation(targetCell, targetAnnotation));
+          const lines = annoteSpan.getAttribute("data-code-lines").split(",");
+          const lineIds = lines.map((line) => {
+            return targetCell + "-" + line;
+          })
+          let top = null;
+          let height = null;
+          let parent = null;
+          if (lineIds.length > 0) {
+              //compute the position of the single el (top and bottom and make a div)
+              const el = window.document.getElementById(lineIds[0]);
+              top = el.offsetTop;
+              height = el.offsetHeight;
+              parent = el.parentElement.parentElement;
+            if (lineIds.length > 1) {
+              const lastEl = window.document.getElementById(lineIds[lineIds.length - 1]);
+              const bottom = lastEl.offsetTop + lastEl.offsetHeight;
+              height = bottom - top;
+            }
+            if (top !== null && height !== null && parent !== null) {
+              // cook up a div (if necessary) and position it 
+              let div = window.document.getElementById("code-annotation-line-highlight");
+              if (div === null) {
+                div = window.document.createElement("div");
+                div.setAttribute("id", "code-annotation-line-highlight");
+                div.style.position = 'absolute';
+                parent.appendChild(div);
+              }
+              div.style.top = top - 2 + "px";
+              div.style.height = height + 4 + "px";
+              div.style.left = 0;
+              let gutterDiv = window.document.getElementById("code-annotation-line-highlight-gutter");
+              if (gutterDiv === null) {
+                gutterDiv = window.document.createElement("div");
+                gutterDiv.setAttribute("id", "code-annotation-line-highlight-gutter");
+                gutterDiv.style.position = 'absolute';
+                const codeCell = window.document.getElementById(targetCell);
+                const gutter = codeCell.querySelector('.code-annotation-gutter');
+                gutter.appendChild(gutterDiv);
+              }
+              gutterDiv.style.top = top - 2 + "px";
+              gutterDiv.style.height = height + 4 + "px";
+            }
+            selectedAnnoteEl = annoteEl;
+          }
+        };
+        const unselectCodeLines = () => {
+          const elementsIds = ["code-annotation-line-highlight", "code-annotation-line-highlight-gutter"];
+          elementsIds.forEach((elId) => {
+            const div = window.document.getElementById(elId);
+            if (div) {
+              div.remove();
+            }
+          });
+          selectedAnnoteEl = undefined;
+        };
+          // Handle positioning of the toggle
+      window.addEventListener(
+        "resize",
+        throttle(() => {
+          elRect = undefined;
+          if (selectedAnnoteEl) {
+            selectCodeLines(selectedAnnoteEl);
+          }
+        }, 10)
+      );
+      function throttle(fn, ms) {
+      let throttle = false;
+      let timer;
+        return (...args) => {
+          if(!throttle) { // first call gets through
+              fn.apply(this, args);
+              throttle = true;
+          } else { // all the others get throttled
+              if(timer) clearTimeout(timer); // cancel #2
+              timer = setTimeout(() => {
+                fn.apply(this, args);
+                timer = throttle = false;
+              }, ms);
+          }
+        };
+      }
+        // Attach click handler to the DT
+        const annoteDls = window.document.querySelectorAll('dt[data-target-cell]');
+        for (const annoteDlNode of annoteDls) {
+          annoteDlNode.addEventListener('click', (event) => {
+            const clickedEl = event.target;
+            if (clickedEl !== selectedAnnoteEl) {
+              unselectCodeLines();
+              const activeEl = window.document.querySelector('dt[data-target-cell].code-annotation-active');
+              if (activeEl) {
+                activeEl.classList.remove('code-annotation-active');
+              }
+              selectCodeLines(clickedEl);
+              clickedEl.classList.add('code-annotation-active');
+            } else {
+              // Unselect the line
+              unselectCodeLines();
+              clickedEl.classList.remove('code-annotation-active');
+            }
+          });
+        }
+    const findCites = (el) => {
+      const parentEl = el.parentElement;
+      if (parentEl) {
+        const cites = parentEl.dataset.cites;
+        if (cites) {
+          return {
+            el,
+            cites: cites.split(' ')
+          };
+        } else {
+          return findCites(el.parentElement)
+        }
+      } else {
+        return undefined;
+      }
+    };
+    var bibliorefs = window.document.querySelectorAll('a[role="doc-biblioref"]');
+    for (var i=0; i<bibliorefs.length; i++) {
+      const ref = bibliorefs[i];
+      const citeInfo = findCites(ref);
+      if (citeInfo) {
+        tippyHover(citeInfo.el, function() {
+          var popup = window.document.createElement('div');
+          citeInfo.cites.forEach(function(cite) {
+            var citeDiv = window.document.createElement('div');
+            citeDiv.classList.add('hanging-indent');
+            citeDiv.classList.add('csl-entry');
+            var biblioDiv = window.document.getElementById('ref-' + cite);
+            if (biblioDiv) {
+              citeDiv.innerHTML = biblioDiv.innerHTML;
+            }
+            popup.appendChild(citeDiv);
+          });
+          return popup.innerHTML;
+        });
+      }
+    }
+  });
+  </script>
+</div> <!-- /content -->
+
+
+
+
+</body></html>

@@ -1,5 +1,223 @@
 [
   {
+    "objectID": "trigonometric_integrals.html",
+    "href": "trigonometric_integrals.html",
+    "title": "Lecture Notes: Trigonometric Integrals",
+    "section": "",
+    "text": "Stewart, Calculus, §7.2\nLearning objectives. By the end of this lecture you should be able to: 1. Integrate \\(\\sin^m x\\cos^n x\\) by saving one factor and substituting, or with half-angle identities. 2. Integrate \\(\\tan^m x\\sec^n x\\) the same way. 3. Find \\(\\int\\tan x\\,dx\\), \\(\\int\\sec x\\,dx\\) and \\(\\int\\sec^3 x\\,dx\\). 4. Use product-to-sum identities for \\(\\sin mx\\cos nx\\), \\(\\sin mx\\sin nx\\) and \\(\\cos mx\\cos nx\\). 5. Check every answer symbolically with SymPy and numerically with NumPy.\nCode\nimport numpy as np\nimport sympy as sp\nimport matplotlib.pyplot as plt\nfrom IPython.display import Math, display\n\nsp.init_printing()\nx, u = sp.symbols(\"x u\")",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "7.2 Trigonometric Integrals"
+    ]
+  },
+  {
+    "objectID": "trigonometric_integrals.html#the-identities-we-need",
+    "href": "trigonometric_integrals.html#the-identities-we-need",
+    "title": "Lecture Notes: Trigonometric Integrals",
+    "section": "1. The identities we need",
+    "text": "1. The identities we need\nEvery technique in this section uses one of these identities to rewrite the integrand.\n\n\n\nName\nIdentity\n\n\n\n\nPythagorean\n\\(\\sin^2 x + \\cos^2 x = 1\\)\n\n\nPythagorean (tan/sec)\n\\(\\tan^2 x + 1 = \\sec^2 x\\)\n\n\nHalf-angle\n\\(\\sin^2 x = \\tfrac12(1 - \\cos 2x)\\)\n\n\nHalf-angle\n\\(\\cos^2 x = \\tfrac12(1 + \\cos 2x)\\)\n\n\nDouble-angle\n\\(\\sin x\\cos x = \\tfrac12\\sin 2x\\)\n\n\n\nWe also need these derivatives, because they decide which substitution works: \\[\\frac{d}{dx}\\sin x = \\cos x,\\qquad \\frac{d}{dx}\\cos x = -\\sin x,\\qquad \\frac{d}{dx}\\tan x = \\sec^2 x,\\qquad \\frac{d}{dx}\\sec x = \\sec x\\tan x.\\]\nLet’s confirm the identities with SymPy:\n\n\nCode\nidentities = {\n    r\"\\sin^2 x + \\cos^2 x = 1\": sp.sin(x)**2 + sp.cos(x)**2 - 1,\n    r\"\\tan^2 x + 1 = \\sec^2 x\": sp.tan(x)**2 + 1 - sp.sec(x)**2,\n    r\"\\sin^2 x = \\tfrac12(1-\\cos 2x)\": sp.sin(x)**2 - (1 - sp.cos(2 * x)) / 2,\n    r\"\\cos^2 x = \\tfrac12(1+\\cos 2x)\": sp.cos(x)**2 - (1 + sp.cos(2 * x)) / 2,\n    r\"\\sin x\\cos x = \\tfrac12\\sin 2x\": sp.sin(x) * sp.cos(x) - sp.sin(2 * x) / 2,\n}\nfor name, diff in identities.items():\n    display(Math(name + rf\"\\quad\\text{{: {sp.simplify(diff) == 0}}}\"))\n\n\n\\(\\displaystyle \\sin^2 x + \\cos^2 x = 1\\quad\\text{: True}\\)\n\n\n\\(\\displaystyle \\tan^2 x + 1 = \\sec^2 x\\quad\\text{: True}\\)\n\n\n\\(\\displaystyle \\sin^2 x = \\tfrac12(1-\\cos 2x)\\quad\\text{: True}\\)\n\n\n\\(\\displaystyle \\cos^2 x = \\tfrac12(1+\\cos 2x)\\quad\\text{: True}\\)\n\n\n\\(\\displaystyle \\sin x\\cos x = \\tfrac12\\sin 2x\\quad\\text{: True}\\)\n\n\n\nA checking function\nAs in §7.1, we check every antiderivative by differentiating it. Trig answers can look very different and still be equal, so if simplify cannot reduce \\(F' - f\\) to \\(0\\), the function also compares \\(F'\\) and \\(f\\) numerically at a few points.\n\n\nCode\ndef check(F, integrand, var=x):\n    # Verify F' = integrand: symbolically first, then numerically at sample points\n    diff = sp.diff(F, var) - integrand\n    ok = sp.simplify(diff) == 0\n    if not ok:\n        pts = [0.3, 0.7, 1.1, 2.0, -0.4]\n        ok = all(abs(complex(diff.subs(var, p).evalf())) &lt; 1e-10 for p in pts)\n    print(\"d/dx(answer) == integrand:\", ok)\n    return ok",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "7.2 Trigonometric Integrals"
+    ]
+  },
+  {
+    "objectID": "trigonometric_integrals.html#powers-of-sine-and-cosine-displaystyleintsinm-xcosn-xdx",
+    "href": "trigonometric_integrals.html#powers-of-sine-and-cosine-displaystyleintsinm-xcosn-xdx",
+    "title": "Lecture Notes: Trigonometric Integrals",
+    "section": "2. Powers of sine and cosine: \\(\\displaystyle\\int\\sin^m x\\cos^n x\\,dx\\)",
+    "text": "2. Powers of sine and cosine: \\(\\displaystyle\\int\\sin^m x\\cos^n x\\,dx\\)\n\nExample 1: \\(\\displaystyle\\int\\cos^3 x\\,dx\\)\nThe substitution \\(u = \\cos x\\) doesn’t work, because \\(du = -\\sin x\\,dx\\) and there is no \\(\\sin x\\) in the integrand. Instead, save one factor of \\(\\cos x\\) for \\(du\\) and turn the rest into sines: \\[\\cos^3 x = \\cos^2 x\\cdot\\cos x = (1 - \\sin^2 x)\\cos x.\\] Now \\(u = \\sin x\\), \\(du = \\cos x\\,dx\\): \\[\\int\\cos^3 x\\,dx = \\int(1 - u^2)\\,du = u - \\tfrac13u^3 + C = \\sin x - \\tfrac13\\sin^3 x + C.\\]\n\n\nCode\nintegrand_u = 1 - u**2\nG = sp.integrate(integrand_u, u)\nF = G.subs(u, sp.sin(x))\ndisplay(Math(r\"\\int(1-u^2)\\,du = \" + sp.latex(G) + r\"\\qquad\\Longrightarrow\\qquad \\int\\cos^3x\\,dx = \" + sp.latex(F) + \" + C\"))\ncheck(F, sp.cos(x)**3);\n\n\n\\(\\displaystyle \\int(1-u^2)\\,du = - \\frac{u^{3}}{3} + u\\qquad\\Longrightarrow\\qquad \\int\\cos^3x\\,dx = - \\frac{\\sin^{3}{\\left(x \\right)}}{3} + \\sin{\\left(x \\right)} + C\\)\n\n\nd/dx(answer) == integrand: True\n\n\n\n\nExample 2: \\(\\displaystyle\\int\\sin^5 x\\cos^2 x\\,dx\\)\nThis time the power of sine is odd. Save one \\(\\sin x\\) for \\(du\\) and convert the remaining \\(\\sin^4 x\\) into cosines: \\[\\sin^5 x\\cos^2 x = (\\sin^2 x)^2\\cos^2 x\\cdot\\sin x = (1 - \\cos^2 x)^2\\cos^2 x\\,\\sin x.\\] With \\(u = \\cos x\\), \\(du = -\\sin x\\,dx\\): \\[\\begin{aligned}\n\\int\\sin^5 x\\cos^2 x\\,dx &= -\\int(1 - u^2)^2u^2\\,du = -\\int(u^2 - 2u^4 + u^6)\\,du\\\\\n&= -\\tfrac13\\cos^3 x + \\tfrac25\\cos^5 x - \\tfrac17\\cos^7 x + C.\n\\end{aligned}\\]\n\n\nCode\nintegrand_u = -(1 - u**2)**2 * u**2\nG = sp.integrate(sp.expand(integrand_u), u)\nF = G.subs(u, sp.cos(x))\ndisplay(Math(r\"\\int\\sin^5x\\cos^2x\\,dx = \" + sp.latex(F) + \" + C\"))\ncheck(F, sp.sin(x)**5 * sp.cos(x)**2);\n\n\n\\(\\displaystyle \\int\\sin^5x\\cos^2x\\,dx = - \\frac{\\cos^{7}{\\left(x \\right)}}{7} + \\frac{2 \\cos^{5}{\\left(x \\right)}}{5} - \\frac{\\cos^{3}{\\left(x \\right)}}{3} + C\\)\n\n\nd/dx(answer) == integrand: True\n\n\n\n\nThe strategy when one power is odd\n\n\n\n\n\n\n\n\n\nCase\nSave\nConvert the rest with\nSubstitute\n\n\n\n\npower of \\(\\cos\\) is odd\none \\(\\cos x\\)\n\\(\\cos^2 x = 1 - \\sin^2 x\\)\n\\(u = \\sin x\\)\n\n\npower of \\(\\sin\\) is odd\none \\(\\sin x\\)\n\\(\\sin^2 x = 1 - \\cos^2 x\\)\n\\(u = \\cos x\\)\n\n\n\nIf both powers are odd, either choice works.\nThe function below does these steps for any \\(m, n \\ge 0\\) with at least one odd. It shows the integral in \\(u\\), so you can compare it with your own work.\n\n\nCode\ndef sin_cos_odd(m, n):\n    # ∫ sin^m x cos^n x dx when m or n is odd, by saving one factor and substituting\n    if n % 2 == 1:                       # save cos x, u = sin x, du = cos x dx\n        sub, g = sp.sin(x), u**m * (1 - u**2)**((n - 1) // 2)\n    elif m % 2 == 1:                     # save sin x, u = cos x, du = -sin x dx\n        sub, g = sp.cos(x), -(1 - u**2)**((m - 1) // 2) * u**n\n    else:\n        raise ValueError(\"both powers are even: use the half-angle identities\")\n    G = sp.integrate(sp.expand(g), u)\n    F = G.subs(u, sub)\n    display(Math(\n        rf\"u = {sp.latex(sub)}:\\quad \\int \\sin^{{{m}}}x\\cos^{{{n}}}x\\,dx = \\int {sp.latex(sp.factor(g))}\\,du\"\n        rf\" = {sp.latex(F)} + C\"\n    ))\n    return F\n\nF = sin_cos_odd(2, 5)\ncheck(F, sp.sin(x)**2 * sp.cos(x)**5);\nF = sin_cos_odd(3, 3)\ncheck(F, sp.sin(x)**3 * sp.cos(x)**3);\n\n\n\\(\\displaystyle u = \\sin{\\left(x \\right)}:\\quad \\int \\sin^{2}x\\cos^{5}x\\,dx = \\int u^{2} \\left(u - 1\\right)^{2} \\left(u + 1\\right)^{2}\\,du = \\frac{\\sin^{7}{\\left(x \\right)}}{7} - \\frac{2 \\sin^{5}{\\left(x \\right)}}{5} + \\frac{\\sin^{3}{\\left(x \\right)}}{3} + C\\)\n\n\nd/dx(answer) == integrand: True\n\n\n\\(\\displaystyle u = \\sin{\\left(x \\right)}:\\quad \\int \\sin^{3}x\\cos^{3}x\\,dx = \\int - u^{3} \\left(u - 1\\right) \\left(u + 1\\right)\\,du = - \\frac{\\sin^{6}{\\left(x \\right)}}{6} + \\frac{\\sin^{4}{\\left(x \\right)}}{4} + C\\)\n\n\nd/dx(answer) == integrand: True\n\n\n\n\nExample 3: \\(\\displaystyle\\int_0^\\pi\\sin^2 x\\,dx\\) (both powers even)\nSaving one \\(\\sin x\\) leaves \\(\\sin x\\), which can’t be written in terms of \\(\\cos x\\) without a square root. When both powers are even, use the half-angle identity instead: \\[\\int_0^\\pi\\sin^2 x\\,dx = \\tfrac12\\int_0^\\pi(1 - \\cos 2x)\\,dx = \\tfrac12\\Big[x - \\tfrac12\\sin 2x\\Big]_0^\\pi = \\tfrac12\\Big(\\pi - \\tfrac12\\sin 2\\pi\\Big) - \\tfrac12(0 - 0) = \\frac{\\pi}{2}.\\]\nSymbolic and numerical check:\n\n\nCode\nexact = sp.integrate(sp.sin(x)**2, (x, 0, sp.pi))\ndisplay(Math(r\"\\int_0^\\pi\\sin^2x\\,dx = \" + sp.latex(exact) + rf\" \\approx {float(exact):.10f}\"))\n\nxs = np.linspace(0, np.pi, 100_001)\nprint(f\"NumPy trapezoid: {np.trapezoid(np.sin(xs)**2, xs):.10f}\")\n\n\n\\(\\displaystyle \\int_0^\\pi\\sin^2x\\,dx = \\frac{\\pi}{2} \\approx 1.5707963268\\)\n\n\nNumPy trapezoid: 1.5707963268\n\n\nWhy \\(\\pi/2\\)? The half-angle identity says \\(\\sin^2 x\\) is the constant \\(\\tfrac12\\) plus a cosine wave \\(-\\tfrac12\\cos 2x\\). Over a whole period the wave has zero net area, so only the \\(\\tfrac12\\) is left: \\(\\tfrac12\\cdot\\pi\\).\n\n\nCode\nt = np.linspace(0, np.pi, 400)\nfig, ax = plt.subplots(figsize=(7, 3.5))\nax.plot(t, np.sin(t)**2, \"k\", lw=2, label=r\"$\\sin^2 x$\")\nax.axhline(0.5, color=\"C1\", ls=\"--\", label=r\"$\\frac{1}{2}$\")\nax.plot(t, -0.5 * np.cos(2 * t), color=\"C0\", lw=1, label=r\"$-\\frac{1}{2}\\cos 2x$\")\nax.fill_between(t, 0.5, np.sin(t)**2, alpha=0.25, color=\"C0\")\nax.set_xticks([0, np.pi / 2, np.pi], [\"0\", r\"$\\pi/2$\", r\"$\\pi$\"])\nax.set_title(r\"$\\sin^2 x = \\frac{1}{2} - \\frac{1}{2}\\cos 2x$: the shaded parts above and below $\\frac{1}{2}$ cancel\")\nax.legend(loc=\"lower right\")\nplt.show()\n\n\n\n\n\n\n\n\n\n\n\nExample 4: \\(\\displaystyle\\int\\sin^4 x\\,dx\\)\nUse the half-angle identity, then use it again on \\(\\cos^2 2x = \\tfrac12(1 + \\cos 4x)\\): \\[\\begin{aligned}\n\\int\\sin^4 x\\,dx &= \\int\\Big(\\frac{1 - \\cos 2x}{2}\\Big)^2dx = \\tfrac14\\int(1 - 2\\cos 2x + \\cos^2 2x)\\,dx\\\\\n&= \\tfrac14\\int\\Big(\\tfrac32 - 2\\cos 2x + \\tfrac12\\cos 4x\\Big)dx\\\\\n&= \\tfrac38x - \\tfrac14\\sin 2x + \\tfrac1{32}\\sin 4x + C.\n\\end{aligned}\\]\nIn §7.1 we got \\(\\int\\sin^4 x\\,dx\\) from the reduction formula. The answer looked different there, but the two antiderivatives have the same derivative:\n\n\nCode\nF = sp.Rational(3, 8) * x - sp.sin(2 * x) / 4 + sp.sin(4 * x) / 32\ndisplay(Math(r\"\\int\\sin^4x\\,dx = \" + sp.latex(F) + \" + C\"))\ncheck(F, sp.sin(x)**4)\n\n# §7.1 reduction formula result: -1/4 cos x sin^3 x - 3/8 cos x sin x + 3/8 x\nF_reduction = -sp.cos(x) * sp.sin(x)**3 / 4 - sp.Rational(3, 8) * sp.cos(x) * sp.sin(x) + sp.Rational(3, 8) * x\nprint(\"Half-angle answer - reduction answer =\", sp.simplify(F - F_reduction))\n\n\n\\(\\displaystyle \\int\\sin^4x\\,dx = \\frac{3 x}{8} - \\frac{\\sin{\\left(2 x \\right)}}{4} + \\frac{\\sin{\\left(4 x \\right)}}{32} + C\\)\n\n\nd/dx(answer) == integrand: True\nHalf-angle answer - reduction answer = 0\n\n\n\n\nThe strategy when both powers are even\nUse the half-angle identities \\[\\sin^2 x = \\tfrac12(1 - \\cos 2x),\\qquad \\cos^2 x = \\tfrac12(1 + \\cos 2x),\\] and sometimes \\(\\sin x\\cos x = \\tfrac12\\sin 2x\\). Repeat as needed: each step halves the powers and doubles the angle.\nFor example, \\(\\int\\sin^2 x\\cos^2 x\\,dx = \\int\\big(\\tfrac12\\sin 2x\\big)^2dx = \\tfrac18\\int(1 - \\cos 4x)\\,dx = \\tfrac18x - \\tfrac1{32}\\sin 4x + C\\):\n\n\nCode\nF = x / 8 - sp.sin(4 * x) / 32\ndisplay(Math(r\"\\int\\sin^2x\\cos^2x\\,dx = \" + sp.latex(F) + \" + C\"))\ncheck(F, sp.sin(x)**2 * sp.cos(x)**2);\n\n\n\\(\\displaystyle \\int\\sin^2x\\cos^2x\\,dx = \\frac{x}{8} - \\frac{\\sin{\\left(4 x \\right)}}{32} + C\\)\n\n\nd/dx(answer) == integrand: True",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "7.2 Trigonometric Integrals"
+    ]
+  },
+  {
+    "objectID": "trigonometric_integrals.html#powers-of-tangent-and-secant-displaystyleinttanm-xsecn-xdx",
+    "href": "trigonometric_integrals.html#powers-of-tangent-and-secant-displaystyleinttanm-xsecn-xdx",
+    "title": "Lecture Notes: Trigonometric Integrals",
+    "section": "3. Powers of tangent and secant: \\(\\displaystyle\\int\\tan^m x\\sec^n x\\,dx\\)",
+    "text": "3. Powers of tangent and secant: \\(\\displaystyle\\int\\tan^m x\\sec^n x\\,dx\\)\nThe same idea works here, using the two derivatives \\[\\frac{d}{dx}\\tan x = \\sec^2 x,\\qquad \\frac{d}{dx}\\sec x = \\sec x\\tan x.\\]\n\nExample 5: \\(\\displaystyle\\int\\tan^6 x\\sec^4 x\\,dx\\)\nSave \\(\\sec^2 x\\) for \\(du\\) (with \\(u = \\tan x\\)) and convert the remaining \\(\\sec^2 x\\) with \\(\\sec^2 x = 1 + \\tan^2 x\\): \\[\\int\\tan^6 x\\sec^4 x\\,dx = \\int\\tan^6 x\\,(1 + \\tan^2 x)\\sec^2 x\\,dx = \\int u^6(1 + u^2)\\,du = \\frac{\\tan^7 x}{7} + \\frac{\\tan^9 x}{9} + C.\\]\n\n\nCode\nG = sp.integrate(sp.expand(u**6 * (1 + u**2)), u)\nF = G.subs(u, sp.tan(x))\ndisplay(Math(r\"\\int\\tan^6x\\sec^4x\\,dx = \" + sp.latex(F) + \" + C\"))\ncheck(F, sp.tan(x)**6 * sp.sec(x)**4);\n\n\n\\(\\displaystyle \\int\\tan^6x\\sec^4x\\,dx = \\frac{\\tan^{9}{\\left(x \\right)}}{9} + \\frac{\\tan^{7}{\\left(x \\right)}}{7} + C\\)\n\n\nd/dx(answer) == integrand: True\n\n\n\n\nExample 6: \\(\\displaystyle\\int\\tan^5\\theta\\sec^7\\theta\\,d\\theta\\)\nNow the power of secant is odd, so we can’t save \\(\\sec^2\\theta\\) and still convert the rest. The power of tangent is odd, so save \\(\\sec\\theta\\tan\\theta\\) for \\(du\\) (with \\(u = \\sec\\theta\\)) and convert the remaining \\(\\tan^4\\theta\\) with \\(\\tan^2\\theta = \\sec^2\\theta - 1\\): \\[\\begin{aligned}\n\\int\\tan^5\\theta\\sec^7\\theta\\,d\\theta &= \\int(\\sec^2\\theta - 1)^2\\sec^6\\theta\\cdot\\sec\\theta\\tan\\theta\\,d\\theta = \\int(u^2 - 1)^2u^6\\,du\\\\\n&= \\frac{\\sec^{11}\\theta}{11} - \\frac{2\\sec^9\\theta}{9} + \\frac{\\sec^7\\theta}{7} + C.\n\\end{aligned}\\]\n\n\nCode\nG = sp.integrate(sp.expand((u**2 - 1)**2 * u**6), u)\nF = G.subs(u, sp.sec(x))\ndisplay(Math(r\"\\int\\tan^5\\theta\\sec^7\\theta\\,d\\theta = \" + sp.latex(F.subs(x, sp.Symbol(\"theta\"))) + \" + C\"))\ncheck(F, sp.tan(x)**5 * sp.sec(x)**7);\n\n\n\\(\\displaystyle \\int\\tan^5\\theta\\sec^7\\theta\\,d\\theta = \\frac{\\sec^{11}{\\left(\\theta \\right)}}{11} - \\frac{2 \\sec^{9}{\\left(\\theta \\right)}}{9} + \\frac{\\sec^{7}{\\left(\\theta \\right)}}{7} + C\\)\n\n\nd/dx(answer) == integrand: True\n\n\n\n\nThe strategy for \\(\\tan^m x\\sec^n x\\)\n\n\n\n\n\n\n\n\n\nCase\nSave\nConvert the rest with\nSubstitute\n\n\n\n\npower of \\(\\sec\\) is even (\\(n \\ge 2\\))\n\\(\\sec^2 x\\)\n\\(\\sec^2 x = 1 + \\tan^2 x\\)\n\\(u = \\tan x\\)\n\n\npower of \\(\\tan\\) is odd\n\\(\\sec x\\tan x\\)\n\\(\\tan^2 x = \\sec^2 x - 1\\)\n\\(u = \\sec x\\)\n\n\n\nThe same rules work for \\(\\cot^m x\\csc^n x\\), using \\(\\frac{d}{dx}\\cot x = -\\csc^2 x\\), \\(\\frac{d}{dx}\\csc x = -\\csc x\\cot x\\) and \\(1 + \\cot^2 x = \\csc^2 x\\).\n\n\nCode\ndef tan_sec(m, n):\n    # ∫ tan^m x sec^n x dx when sec power is even (n &gt;= 2) or tan power is odd\n    if n % 2 == 0 and n &gt;= 2:            # save sec^2 x, u = tan x\n        sub, g = sp.tan(x), u**m * (1 + u**2)**((n - 2) // 2)\n    elif m % 2 == 1 and n &gt;= 1:          # save sec x tan x, u = sec x\n        sub, g = sp.sec(x), (u**2 - 1)**((m - 1) // 2) * u**(n - 1)\n    else:\n        raise ValueError(\"no direct substitution: use identities and/or integration by parts\")\n    G = sp.integrate(sp.expand(g), u)\n    F = G.subs(u, sub)\n    display(Math(\n        rf\"u = {sp.latex(sub)}:\\quad \\int \\tan^{{{m}}}x\\sec^{{{n}}}x\\,dx = \\int {sp.latex(sp.factor(g))}\\,du\"\n        rf\" = {sp.latex(F)} + C\"\n    ))\n    return F\n\nF = tan_sec(2, 4)\ncheck(F, sp.tan(x)**2 * sp.sec(x)**4);\nF = tan_sec(3, 3)\ncheck(F, sp.tan(x)**3 * sp.sec(x)**3);\n\n\n\\(\\displaystyle u = \\tan{\\left(x \\right)}:\\quad \\int \\tan^{2}x\\sec^{4}x\\,dx = \\int u^{2} \\left(u^{2} + 1\\right)\\,du = \\frac{\\tan^{5}{\\left(x \\right)}}{5} + \\frac{\\tan^{3}{\\left(x \\right)}}{3} + C\\)\n\n\nd/dx(answer) == integrand: True\n\n\n\\(\\displaystyle u = \\sec{\\left(x \\right)}:\\quad \\int \\tan^{3}x\\sec^{3}x\\,dx = \\int u^{2} \\left(u - 1\\right) \\left(u + 1\\right)\\,du = \\frac{\\sec^{5}{\\left(x \\right)}}{5} - \\frac{\\sec^{3}{\\left(x \\right)}}{3} + C\\)\n\n\nd/dx(answer) == integrand: True\n\n\n\n\nThe other cases: \\(\\int\\tan x\\,dx\\) and \\(\\int\\sec x\\,dx\\)\nIf the power of tangent is even and the power of secant is odd, neither rule applies. We need two basic integrals.\nTangent. Write \\(\\tan x = \\dfrac{\\sin x}{\\cos x}\\) and substitute \\(u = \\cos x\\): \\[\\int\\tan x\\,dx = -\\int\\frac{du}{u} = -\\ln|\\cos x| + C = \\ln|\\sec x| + C.\\]\nSecant. Multiply top and bottom by \\(\\sec x + \\tan x\\). The new numerator is the derivative of the denominator: \\[\\int\\sec x\\,dx = \\int\\frac{\\sec^2 x + \\sec x\\tan x}{\\sec x + \\tan x}\\,dx = \\ln|\\sec x + \\tan x| + C.\\]\n(In the code we drop the absolute values. That doesn’t change the derivative.)\n\n\nCode\nF_tan = sp.log(sp.sec(x))\nF_sec = sp.log(sp.sec(x) + sp.tan(x))\ndisplay(Math(r\"\\int\\tan x\\,dx = \" + sp.latex(F_tan) + \" + C\"))\ncheck(F_tan, sp.tan(x))\ndisplay(Math(r\"\\int\\sec x\\,dx = \" + sp.latex(F_sec) + \" + C\"))\ncheck(F_sec, sp.sec(x));\n\n\n\\(\\displaystyle \\int\\tan x\\,dx = \\log{\\left(\\sec{\\left(x \\right)} \\right)} + C\\)\n\n\nd/dx(answer) == integrand: True\n\n\n\\(\\displaystyle \\int\\sec x\\,dx = \\log{\\left(\\tan{\\left(x \\right)} + \\sec{\\left(x \\right)} \\right)} + C\\)\n\n\nd/dx(answer) == integrand: True\n\n\n\n\nExample 7: \\(\\displaystyle\\int\\tan^3 x\\,dx\\)\nThe power of tangent is odd, but there is no \\(\\sec x\\) to save. Instead, convert \\(\\tan^2 x = \\sec^2 x - 1\\) and split: \\[\\int\\tan^3 x\\,dx = \\int\\tan x\\,(\\sec^2 x - 1)\\,dx = \\int\\tan x\\sec^2 x\\,dx - \\int\\tan x\\,dx = \\frac{\\tan^2 x}{2} - \\ln|\\sec x| + C.\\] The first integral uses \\(u = \\tan x\\).\n\n\nCode\nF = sp.tan(x)**2 / 2 - sp.log(sp.sec(x))\ndisplay(Math(r\"\\int\\tan^3x\\,dx = \" + sp.latex(F) + \" + C\"))\ncheck(F, sp.tan(x)**3);\n\n\n\\(\\displaystyle \\int\\tan^3x\\,dx = - \\log{\\left(\\sec{\\left(x \\right)} \\right)} + \\frac{\\tan^{2}{\\left(x \\right)}}{2} + C\\)\n\n\nd/dx(answer) == integrand: True\n\n\n\n\nExample 8: \\(\\displaystyle\\int\\sec^3 x\\,dx\\) (integration by parts)\nOdd powers of secant alone need integration by parts. This is the cyclic case from §7.1. Take \\[u = \\sec x,\\quad dv = \\sec^2 x\\,dx\\quad\\Longrightarrow\\quad du = \\sec x\\tan x\\,dx,\\quad v = \\tan x.\\] Then, with \\(\\tan^2 x = \\sec^2 x - 1\\): \\[\\begin{aligned}\n\\int\\sec^3 x\\,dx &= \\sec x\\tan x - \\int\\sec x\\tan^2 x\\,dx\\\\\n&= \\sec x\\tan x - \\int\\sec^3 x\\,dx + \\int\\sec x\\,dx.\n\\end{aligned}\\] \\(\\int\\sec^3 x\\,dx\\) appears on both sides. Solve for it: \\[\\boxed{\\int\\sec^3 x\\,dx = \\tfrac12\\big(\\sec x\\tan x + \\ln|\\sec x + \\tan x|\\big) + C}\\]\nIn SymPy, treat \\(I = \\int\\sec^3 x\\,dx\\) as an unknown, as in §7.1:\n\n\nCode\nI = sp.Symbol(\"I\")\nequation = sp.Eq(I, sp.sec(x) * sp.tan(x) - I + F_sec)\ndisplay(equation)\nF = sp.solve(equation, I)[0]\ndisplay(Math(r\"\\int\\sec^3x\\,dx = \" + sp.latex(F) + \" + C\"))\ncheck(F, sp.sec(x)**3);\n\n\n\\(\\displaystyle I = - I + \\log{\\left(\\tan{\\left(x \\right)} + \\sec{\\left(x \\right)} \\right)} + \\tan{\\left(x \\right)} \\sec{\\left(x \\right)}\\)\n\n\n\\(\\displaystyle \\int\\sec^3x\\,dx = \\frac{\\log{\\left(\\tan{\\left(x \\right)} + \\sec{\\left(x \\right)} \\right)}}{2} + \\frac{\\tan{\\left(x \\right)} \\sec{\\left(x \\right)}}{2} + C\\)\n\n\nd/dx(answer) == integrand: True",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "7.2 Trigonometric Integrals"
+    ]
+  },
+  {
+    "objectID": "trigonometric_integrals.html#products-with-different-angles",
+    "href": "trigonometric_integrals.html#products-with-different-angles",
+    "title": "Lecture Notes: Trigonometric Integrals",
+    "section": "4. Products with different angles",
+    "text": "4. Products with different angles\nIntegrals like \\(\\int\\sin 4x\\cos 5x\\,dx\\) show up in Fourier series. Use the product-to-sum identities: \\[\\begin{aligned}\n\\sin A\\cos B &= \\tfrac12\\big[\\sin(A - B) + \\sin(A + B)\\big]\\\\\n\\sin A\\sin B &= \\tfrac12\\big[\\cos(A - B) - \\cos(A + B)\\big]\\\\\n\\cos A\\cos B &= \\tfrac12\\big[\\cos(A - B) + \\cos(A + B)\\big]\n\\end{aligned}\\] Each one comes from adding or subtracting the addition formulas for \\(\\sin(A \\pm B)\\) or \\(\\cos(A \\pm B)\\).\n\n\nCode\nA, B = sp.symbols(\"A B\")\nproduct_to_sum = [\n    (sp.sin(A) * sp.cos(B), (sp.sin(A - B) + sp.sin(A + B)) / 2),\n    (sp.sin(A) * sp.sin(B), (sp.cos(A - B) - sp.cos(A + B)) / 2),\n    (sp.cos(A) * sp.cos(B), (sp.cos(A - B) + sp.cos(A + B)) / 2),\n]\nfor lhs, rhs in product_to_sum:\n    ok = sp.simplify(sp.expand_trig(lhs - rhs)) == 0\n    display(Math(sp.latex(lhs) + \" = \" + sp.latex(rhs) + rf\"\\quad\\text{{: {ok}}}\"))\n\n\n\\(\\displaystyle \\sin{\\left(A \\right)} \\cos{\\left(B \\right)} = \\frac{\\sin{\\left(A - B \\right)}}{2} + \\frac{\\sin{\\left(A + B \\right)}}{2}\\quad\\text{: True}\\)\n\n\n\\(\\displaystyle \\sin{\\left(A \\right)} \\sin{\\left(B \\right)} = \\frac{\\cos{\\left(A - B \\right)}}{2} - \\frac{\\cos{\\left(A + B \\right)}}{2}\\quad\\text{: True}\\)\n\n\n\\(\\displaystyle \\cos{\\left(A \\right)} \\cos{\\left(B \\right)} = \\frac{\\cos{\\left(A - B \\right)}}{2} + \\frac{\\cos{\\left(A + B \\right)}}{2}\\quad\\text{: True}\\)\n\n\n\nExample 9: \\(\\displaystyle\\int\\sin 4x\\cos 5x\\,dx\\)\nWith \\(A = 4x\\), \\(B = 5x\\): \\[\\sin 4x\\cos 5x = \\tfrac12\\big[\\sin(-x) + \\sin 9x\\big] = \\tfrac12(-\\sin x + \\sin 9x),\\] so \\[\\int\\sin 4x\\cos 5x\\,dx = \\tfrac12\\Big(\\cos x - \\tfrac19\\cos 9x\\Big) + C.\\]\n\n\nCode\nF = (sp.cos(x) - sp.cos(9 * x) / 9) / 2\ndisplay(Math(r\"\\int\\sin 4x\\cos 5x\\,dx = \" + sp.latex(F) + \" + C\"))\ncheck(F, sp.sin(4 * x) * sp.cos(5 * x));\n\n\n\\(\\displaystyle \\int\\sin 4x\\cos 5x\\,dx = \\frac{\\cos{\\left(x \\right)}}{2} - \\frac{\\cos{\\left(9 x \\right)}}{18} + C\\)\n\n\nd/dx(answer) == integrand: True\n\n\n\n\nApplication: orthogonality\nFor positive integers \\(m\\) and \\(n\\), the product-to-sum identities give \\[\\int_{-\\pi}^{\\pi}\\sin mx\\sin nx\\,dx = \\begin{cases}0 & m \\ne n\\\\ \\pi & m = n\\end{cases}\\] When \\(m \\ne n\\), both \\(\\cos(m - n)x\\) and \\(\\cos(m + n)x\\) go through whole periods on \\([-\\pi, \\pi]\\), so their integrals are \\(0\\). When \\(m = n\\), \\(\\cos(m - n)x = 1\\) contributes \\(\\tfrac12\\cdot 2\\pi = \\pi\\).\nThis fact is the basis of Fourier series. Here is the table of values for \\(m, n = 1, \\dots, 5\\), computed both ways:\n\n\nCode\nN = 5\nexact = sp.Matrix(N, N, lambda i, j: sp.integrate(sp.sin((i + 1) * x) * sp.sin((j + 1) * x), (x, -sp.pi, sp.pi)))\ndisplay(Math(r\"\\left[\\int_{-\\pi}^{\\pi}\\sin mx\\sin nx\\,dx\\right]_{m,n=1}^{5} = \" + sp.latex(exact)))\n\nxs = np.linspace(-np.pi, np.pi, 20_001)\nnumeric = np.array([[np.trapezoid(np.sin(m * xs) * np.sin(k * xs), xs) for k in range(1, N + 1)] for m in range(1, N + 1)])\nprint(\"NumPy trapezoid (divided by π):\")\nprint(np.round(numeric / np.pi, 8) + 0.0)  # + 0.0 turns -0. into 0.\n\n\n\\(\\displaystyle \\left[\\int_{-\\pi}^{\\pi}\\sin mx\\sin nx\\,dx\\right]_{m,n=1}^{5} = \\left[\\begin{matrix}\\pi & 0 & 0 & 0 & 0\\\\0 & \\pi & 0 & 0 & 0\\\\0 & 0 & \\pi & 0 & 0\\\\0 & 0 & 0 & \\pi & 0\\\\0 & 0 & 0 & 0 & \\pi\\end{matrix}\\right]\\)\n\n\nNumPy trapezoid (divided by π):\n[[1. 0. 0. 0. 0.]\n [0. 1. 0. 0. 0.]\n [0. 0. 1. 0. 0.]\n [0. 0. 0. 1. 0.]\n [0. 0. 0. 0. 1.]]\n\n\n\n\nCode\nt = np.linspace(-np.pi, np.pi, 800)\nfig, axes = plt.subplots(1, 2, figsize=(10, 3.5), sharey=True)\nfor ax, (m, k) in zip(axes, [(2, 3), (3, 3)]):\n    y = np.sin(m * t) * np.sin(k * t)\n    ax.plot(t, y, \"k\", lw=1.5)\n    ax.fill_between(t, 0, y, where=y &gt; 0, alpha=0.35, color=\"C0\")\n    ax.fill_between(t, 0, y, where=y &lt; 0, alpha=0.35, color=\"C3\")\n    ax.axhline(0, color=\"gray\", lw=0.8)\n    ax.set_xticks([-np.pi, 0, np.pi], [r\"$-\\pi$\", \"0\", r\"$\\pi$\"])\n    ax.set_title(rf\"$\\sin {m}x\\,\\sin {k}x$:  integral $= {np.trapezoid(y, t) / np.pi:.0f}\\pi$\")\nplt.tight_layout()\nplt.show()",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "7.2 Trigonometric Integrals"
+    ]
+  },
+  {
+    "objectID": "trigonometric_integrals.html#common-mistakes",
+    "href": "trigonometric_integrals.html#common-mistakes",
+    "title": "Lecture Notes: Trigonometric Integrals",
+    "section": "5. Common mistakes",
+    "text": "5. Common mistakes\n\nSaving the wrong factor. To substitute \\(u = \\sin x\\) you must save a \\(\\cos x\\), and the other way around. With \\(u = \\tan x\\) save \\(\\sec^2 x\\); with \\(u = \\sec x\\) save \\(\\sec x\\tan x\\).\nUsing \\(u = \\sin x\\) when the power of \\(\\cos x\\) is even. The leftover \\(\\cos x\\) becomes \\(\\sqrt{1 - u^2}\\). Use the half-angle identities instead.\nSign errors with \\(u = \\cos x\\): \\(du = -\\sin x\\,dx\\).\nHalf-angle identities: the angle doubles. \\(\\int\\cos^2 3x\\,dx = \\tfrac12\\int(1 + \\cos 6x)\\,dx\\), not \\(\\cos 3x\\) or \\(\\cos 2x\\).\nForgetting the absolute values in \\(\\ln|\\sec x|\\) and \\(\\ln|\\sec x + \\tan x|\\).\nDifferent-looking answers. Trig antiderivatives can differ by a constant, such as \\(\\tfrac12\\sin^2 x\\) and \\(-\\tfrac12\\cos^2 x\\) for \\(\\int\\sin x\\cos x\\,dx\\). Differentiate to compare them.\n\n\n\nCode\nF1, F2 = sp.sin(x)**2 / 2, -sp.cos(x)**2 / 2\ncheck(F1, sp.sin(x) * sp.cos(x))\ncheck(F2, sp.sin(x) * sp.cos(x))\nprint(\"F1 - F2 =\", sp.simplify(F1 - F2))\n\n\nd/dx(answer) == integrand: True\nd/dx(answer) == integrand: True\nF1 - F2 = 1/2",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "7.2 Trigonometric Integrals"
+    ]
+  },
+  {
+    "objectID": "trigonometric_integrals.html#practice-problems",
+    "href": "trigonometric_integrals.html#practice-problems",
+    "title": "Lecture Notes: Trigonometric Integrals",
+    "section": "6. Practice problems",
+    "text": "6. Practice problems\nTry each by hand first, then run the cell below to check your answers. SymPy may give an answer that looks different from yours, so differentiate yours and compare.\n\n\\(\\displaystyle\\int\\sin^3 x\\cos^2 x\\,dx\\)\n\\(\\displaystyle\\int\\cos^4 x\\,dx\\)\n\\(\\displaystyle\\int\\tan^2 x\\sec^4 x\\,dx\\)\n\\(\\displaystyle\\int\\tan^3 x\\sec x\\,dx\\)\n\\(\\displaystyle\\int\\cos 3x\\cos 7x\\,dx\\)\n\\(\\displaystyle\\int_0^{\\pi/2}\\sin^2 x\\cos^2 x\\,dx\\)\n\\(\\displaystyle\\int_0^{\\pi/4}\\sec^4 x\\,dx\\)\n\n\n\nCode\nproblems = [\n    sp.sin(x)**3 * sp.cos(x)**2,\n    sp.cos(x)**4,\n    sp.tan(x)**2 * sp.sec(x)**4,\n    sp.tan(x)**3 * sp.sec(x),\n    sp.cos(3 * x) * sp.cos(7 * x),\n]\nfor p in problems:\n    F = sp.simplify(sp.integrate(p, x))\n    display(Math(r\"\\int \" + sp.latex(p) + r\"\\,dx = \" + sp.latex(F) + \" + C\"))\n\ndefinite = [\n    (sp.sin(x)**2 * sp.cos(x)**2, 0, sp.pi / 2, lambda t: np.sin(t)**2 * np.cos(t)**2),\n    (sp.sec(x)**4, 0, sp.pi / 4, lambda t: 1 / np.cos(t)**4),\n]\nfor p, a, b, fn in definite:\n    val = sp.integrate(p, (x, a, b))\n    xs = np.linspace(float(a), float(b), 100_001)\n    display(Math(rf\"\\int_{{{sp.latex(a)}}}^{{{sp.latex(b)}}} \" + sp.latex(p) + r\"\\,dx = \"\n                 + sp.latex(sp.simplify(val)) + rf\" \\approx {float(val):.6f}\"))\n    print(f\"NumPy check: {np.trapezoid(fn(xs), xs):.6f}\")\n\n\n\\(\\displaystyle \\int \\sin^{3}{\\left(x \\right)} \\cos^{2}{\\left(x \\right)}\\,dx = \\frac{\\cos^{5}{\\left(x \\right)}}{5} - \\frac{\\cos^{3}{\\left(x \\right)}}{3} + C\\)\n\n\n\\(\\displaystyle \\int \\cos^{4}{\\left(x \\right)}\\,dx = \\frac{3 x}{8} + \\frac{\\sin{\\left(2 x \\right)}}{4} + \\frac{\\sin{\\left(4 x \\right)}}{32} + C\\)\n\n\n\\(\\displaystyle \\int \\tan^{2}{\\left(x \\right)} \\sec^{4}{\\left(x \\right)}\\,dx = \\frac{\\sin^{3}{\\left(x \\right)}}{3 \\cos^{5}{\\left(x \\right)}} - \\frac{2 \\tan^{5}{\\left(x \\right)}}{15} + C\\)\n\n\n\\(\\displaystyle \\int \\tan^{3}{\\left(x \\right)} \\sec{\\left(x \\right)}\\,dx = \\frac{-3 + \\frac{1}{\\cos^{2}{\\left(x \\right)}}}{3 \\cos{\\left(x \\right)}} + C\\)\n\n\n\\(\\displaystyle \\int \\cos{\\left(3 x \\right)} \\cos{\\left(7 x \\right)}\\,dx = \\frac{\\sin{\\left(4 x \\right)}}{8} + \\frac{\\sin{\\left(10 x \\right)}}{20} + C\\)\n\n\n\\(\\displaystyle \\int_{0}^{\\frac{\\pi}{2}} \\sin^{2}{\\left(x \\right)} \\cos^{2}{\\left(x \\right)}\\,dx = \\frac{\\pi}{16} \\approx 0.196350\\)\n\n\nNumPy check: 0.196350\n\n\n\\(\\displaystyle \\int_{0}^{\\frac{\\pi}{4}} \\sec^{4}{\\left(x \\right)}\\,dx = \\frac{4}{3} \\approx 1.333333\\)\n\n\nNumPy check: 1.333333",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "7.2 Trigonometric Integrals"
+    ]
+  },
+  {
+    "objectID": "trigonometric_integrals.html#summary",
+    "href": "trigonometric_integrals.html#summary",
+    "title": "Lecture Notes: Trigonometric Integrals",
+    "section": "Summary",
+    "text": "Summary\n\n\n\n\n\n\n\n\nIntegrand\nStrategy\nSubstitution\n\n\n\n\n\\(\\sin^m x\\cos^n x\\), \\(n\\) odd\nSave \\(\\cos x\\), use \\(\\cos^2 x = 1 - \\sin^2 x\\)\n\\(u = \\sin x\\)\n\n\n\\(\\sin^m x\\cos^n x\\), \\(m\\) odd\nSave \\(\\sin x\\), use \\(\\sin^2 x = 1 - \\cos^2 x\\)\n\\(u = \\cos x\\)\n\n\n\\(\\sin^m x\\cos^n x\\), both even\nHalf-angle identities, repeated\nnone\n\n\n\\(\\tan^m x\\sec^n x\\), \\(n\\) even\nSave \\(\\sec^2 x\\), use \\(\\sec^2 x = 1 + \\tan^2 x\\)\n\\(u = \\tan x\\)\n\n\n\\(\\tan^m x\\sec^n x\\), \\(m\\) odd\nSave \\(\\sec x\\tan x\\), use \\(\\tan^2 x = \\sec^2 x - 1\\)\n\\(u = \\sec x\\)\n\n\n\\(\\tan^m x\\) alone, odd \\(\\sec^n x\\)\n\\(\\tan^2 x = \\sec^2 x - 1\\); parts for \\(\\sec^3 x\\)\nvaries\n\n\n\\(\\sin mx\\cos nx\\), etc.\nProduct-to-sum identities\nnone\n\n\n\n\\[\\int\\tan x\\,dx = \\ln|\\sec x| + C,\\qquad \\int\\sec x\\,dx = \\ln|\\sec x + \\tan x| + C\\]",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "7.2 Trigonometric Integrals"
+    ]
+  },
+  {
+    "objectID": "integration_table.html",
+    "href": "integration_table.html",
+    "title": "Techniques of Integration — Rules and Formulas",
+    "section": "",
+    "text": "Based on Stewart, Calculus, Chapter 7: Techniques of Integration\nThroughout, \\(C\\) is an arbitrary constant and \\(a \\neq 0\\).",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "Integration Rules"
+    ]
+  },
+  {
+    "objectID": "integration_table.html#table-of-integration-formulas-stewart-7.5",
+    "href": "integration_table.html#table-of-integration-formulas-stewart-7.5",
+    "title": "Techniques of Integration — Rules and Formulas",
+    "section": "Table of Integration Formulas (Stewart, §7.5)",
+    "text": "Table of Integration Formulas (Stewart, §7.5)\n\n\n\n\n\n\n\n#\nIntegral\n\n\n\n\n1\n\\(\\displaystyle\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C \\quad (n \\neq -1)\\)\n\n\n2\n\\(\\displaystyle\\int \\frac{1}{x}\\,dx = \\ln\\lvert x\\rvert + C\\)\n\n\n3\n\\(\\displaystyle\\int e^x\\,dx = e^x + C\\)\n\n\n4\n\\(\\displaystyle\\int b^x\\,dx = \\frac{b^x}{\\ln b} + C\\)\n\n\n5\n\\(\\displaystyle\\int \\sin x\\,dx = -\\cos x + C\\)\n\n\n6\n\\(\\displaystyle\\int \\cos x\\,dx = \\sin x + C\\)\n\n\n7\n\\(\\displaystyle\\int \\sec^2 x\\,dx = \\tan x + C\\)\n\n\n8\n\\(\\displaystyle\\int \\csc^2 x\\,dx = -\\cot x + C\\)\n\n\n9\n\\(\\displaystyle\\int \\sec x\\tan x\\,dx = \\sec x + C\\)\n\n\n10\n\\(\\displaystyle\\int \\csc x\\cot x\\,dx = -\\csc x + C\\)\n\n\n11\n\\(\\displaystyle\\int \\sec x\\,dx = \\ln\\lvert\\sec x + \\tan x\\rvert + C\\)\n\n\n12\n\\(\\displaystyle\\int \\csc x\\,dx = \\ln\\lvert\\csc x - \\cot x\\rvert + C\\)\n\n\n13\n\\(\\displaystyle\\int \\tan x\\,dx = \\ln\\lvert\\sec x\\rvert + C\\)\n\n\n14\n\\(\\displaystyle\\int \\cot x\\,dx = \\ln\\lvert\\sin x\\rvert + C\\)\n\n\n15\n\\(\\displaystyle\\int \\sinh x\\,dx = \\cosh x + C\\)\n\n\n16\n\\(\\displaystyle\\int \\cosh x\\,dx = \\sinh x + C\\)\n\n\n17\n\\(\\displaystyle\\int \\frac{dx}{x^2 + a^2} = \\frac{1}{a}\\tan^{-1}\\!\\left(\\frac{x}{a}\\right) + C\\)\n\n\n18\n\\(\\displaystyle\\int \\frac{dx}{\\sqrt{a^2 - x^2}} = \\sin^{-1}\\!\\left(\\frac{x}{a}\\right) + C,\\ a&gt;0\\)\n\n\n19\n\\(\\displaystyle\\int \\frac{dx}{x^2 - a^2} = \\frac{1}{2a}\\ln\\left\\lvert\\frac{x-a}{x+a}\\right\\rvert + C\\)\n\n\n20\n\\(\\displaystyle\\int \\frac{dx}{\\sqrt{x^2 \\pm a^2}} = \\ln\\left\\lvert x + \\sqrt{x^2 \\pm a^2}\\right\\rvert + C\\)",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "Integration Rules"
+    ]
+  },
+  {
+    "objectID": "integration_table.html#integration-by-parts",
+    "href": "integration_table.html#integration-by-parts",
+    "title": "Techniques of Integration — Rules and Formulas",
+    "section": "7.1 Integration by Parts",
+    "text": "7.1 Integration by Parts\nDerived from the Product Rule \\(\\dfrac{d}{dx}[f(x)g(x)] = f(x)g'(x) + g(x)f'(x)\\).\nIndefinite form \\[\\int f(x)\\,g'(x)\\,dx = f(x)\\,g(x) - \\int g(x)\\,f'(x)\\,dx\\]\nShorthand (with \\(u = f(x)\\), \\(v = g(x)\\)): \\[\\boxed{\\int u\\,dv = uv - \\int v\\,du}\\]\nDefinite form \\[\\int_a^b f(x)\\,g'(x)\\,dx = f(x)\\,g(x)\\Big|_a^b - \\int_a^b g(x)\\,f'(x)\\,dx\\]\nChoosing \\(u\\) (LIATE heuristic): pick \\(u\\) as the first type in the list Logarithmic → Inverse trig → Algebraic → Trigonometric → Exponential, and let \\(dv\\) be the rest. Goal: \\(\\int v\\,du\\) should be simpler than the original.\nTips - Repeated parts: e.g. \\(\\int x^2 e^x\\,dx\\) — apply twice. - “Cyclic” integrals such as \\(\\int e^x \\sin x\\,dx\\): apply parts twice, then solve algebraically for the original integral. - Reduction formulas, e.g. \\[\\int \\sin^n x\\,dx = -\\frac{1}{n}\\cos x\\,\\sin^{n-1}x + \\frac{n-1}{n}\\int \\sin^{n-2}x\\,dx\\]\nExample: \\(\\displaystyle\\int x\\sin x\\,dx\\), \\(u=x\\), \\(dv=\\sin x\\,dx \\Rightarrow du=dx\\), \\(v=-\\cos x\\): \\[\\int x\\sin x\\,dx = -x\\cos x + \\int\\cos x\\,dx = -x\\cos x + \\sin x + C\\]",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "Integration Rules"
+    ]
+  },
+  {
+    "objectID": "integration_table.html#trigonometric-integrals",
+    "href": "integration_table.html#trigonometric-integrals",
+    "title": "Techniques of Integration — Rules and Formulas",
+    "section": "7.2 Trigonometric Integrals",
+    "text": "7.2 Trigonometric Integrals\n\nUseful identities\n\\[\\sin^2 x + \\cos^2 x = 1,\\qquad \\tan^2 x + 1 = \\sec^2 x\\] \\[\\sin^2 x = \\tfrac12(1 - \\cos 2x),\\qquad \\cos^2 x = \\tfrac12(1 + \\cos 2x),\\qquad \\sin x\\cos x = \\tfrac12\\sin 2x\\]\n\n\nStrategy for \\(\\displaystyle\\int \\sin^m x\\,\\cos^n x\\,dx\\)\n\n\n\n\n\n\n\nCase\nStrategy\n\n\n\n\n(a) power of cosine is odd (\\(n = 2k+1\\))\nSave one \\(\\cos x\\), write \\(\\cos^{2k}x = (1-\\sin^2 x)^k\\), substitute \\(u = \\sin x\\)\n\n\n(b) power of sine is odd (\\(m = 2k+1\\))\nSave one \\(\\sin x\\), write \\(\\sin^{2k}x = (1-\\cos^2 x)^k\\), substitute \\(u = \\cos x\\)\n\n\n(c) both even\nUse half-angle identities \\(\\sin^2 x = \\tfrac12(1-\\cos 2x)\\), \\(\\cos^2 x = \\tfrac12(1+\\cos 2x)\\)\n\n\n\n(If both are odd, either (a) or (b) works.)\n\n\nStrategy for \\(\\displaystyle\\int \\tan^m x\\,\\sec^n x\\,dx\\)\n\n\n\n\n\n\n\nCase\nStrategy\n\n\n\n\n(a) power of secant is even (\\(n = 2k,\\ k\\ge2\\))\nSave \\(\\sec^2 x\\), write the rest via \\(\\sec^2 x = 1+\\tan^2 x\\), substitute \\(u = \\tan x\\)\n\n\n(b) power of tangent is odd (\\(m = 2k+1\\))\nSave \\(\\sec x\\tan x\\), write the rest via \\(\\tan^2 x = \\sec^2 x - 1\\), substitute \\(u = \\sec x\\)\n\n\nOther cases\nUse identities, integration by parts, and \\(\\int\\tan x\\,dx\\), \\(\\int\\sec x\\,dx\\)\n\n\n\nUseful results: \\[\\int \\tan x\\,dx = \\ln\\lvert\\sec x\\rvert + C,\\qquad \\int \\sec x\\,dx = \\ln\\lvert\\sec x + \\tan x\\rvert + C\\] \\[\\int \\sec^3 x\\,dx = \\tfrac12\\left(\\sec x\\tan x + \\ln\\lvert\\sec x + \\tan x\\rvert\\right) + C\\]\n(Integrals of \\(\\cot^m x\\,\\csc^n x\\) are handled the same way using \\(1 + \\cot^2 x = \\csc^2 x\\).)\n\n\nProducts of sines and cosines with different angles\nFor \\(\\int \\sin mx\\cos nx\\,dx\\), \\(\\int \\sin mx\\sin nx\\,dx\\), \\(\\int \\cos mx\\cos nx\\,dx\\) use: \\[\\sin A\\cos B = \\tfrac12\\left[\\sin(A-B) + \\sin(A+B)\\right]\\] \\[\\sin A\\sin B = \\tfrac12\\left[\\cos(A-B) - \\cos(A+B)\\right]\\] \\[\\cos A\\cos B = \\tfrac12\\left[\\cos(A-B) + \\cos(A+B)\\right]\\]",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "Integration Rules"
+    ]
+  },
+  {
+    "objectID": "integration_table.html#trigonometric-substitution",
+    "href": "integration_table.html#trigonometric-substitution",
+    "title": "Techniques of Integration — Rules and Formulas",
+    "section": "7.3 Trigonometric Substitution",
+    "text": "7.3 Trigonometric Substitution\nUsed for integrands containing \\(\\sqrt{a^2 - x^2}\\), \\(\\sqrt{a^2 + x^2}\\), or \\(\\sqrt{x^2 - a^2}\\) (with \\(a &gt; 0\\)).\n\n\n\n\n\n\n\n\n\nExpression\nSubstitution\nIdentity used\nRestriction on \\(\\theta\\)\n\n\n\n\n\\(\\sqrt{a^2 - x^2}\\)\n\\(x = a\\sin\\theta\\)\n\\(1 - \\sin^2\\theta = \\cos^2\\theta\\)\n\\(-\\tfrac{\\pi}{2} \\le \\theta \\le \\tfrac{\\pi}{2}\\)\n\n\n\\(\\sqrt{a^2 + x^2}\\)\n\\(x = a\\tan\\theta\\)\n\\(1 + \\tan^2\\theta = \\sec^2\\theta\\)\n\\(-\\tfrac{\\pi}{2} &lt; \\theta &lt; \\tfrac{\\pi}{2}\\)\n\n\n\\(\\sqrt{x^2 - a^2}\\)\n\\(x = a\\sec\\theta\\)\n\\(\\sec^2\\theta - 1 = \\tan^2\\theta\\)\n\\(0 \\le \\theta &lt; \\tfrac{\\pi}{2}\\) or \\(\\pi \\le \\theta &lt; \\tfrac{3\\pi}{2}\\)\n\n\n\nSteps 1. Substitute \\(x\\) and \\(dx\\) (e.g. \\(x = a\\sin\\theta \\Rightarrow dx = a\\cos\\theta\\,d\\theta\\)). 2. Simplify the radical with the identity, e.g. \\(\\sqrt{a^2 - a^2\\sin^2\\theta} = a\\cos\\theta\\). 3. Integrate in \\(\\theta\\). 4. Return to \\(x\\) using a reference right triangle (e.g. \\(\\sin\\theta = x/a\\) gives opposite \\(x\\), hypotenuse \\(a\\), adjacent \\(\\sqrt{a^2-x^2}\\)). 5. For definite integrals, change the limits to \\(\\theta\\)-values instead.\nTip: for \\(\\sqrt{ax^2 + bx + c}\\), first complete the square, then use a trig substitution.",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "Integration Rules"
+    ]
+  },
+  {
+    "objectID": "integration_table.html#integration-of-rational-functions-by-partial-fractions",
+    "href": "integration_table.html#integration-of-rational-functions-by-partial-fractions",
+    "title": "Techniques of Integration — Rules and Formulas",
+    "section": "7.4 Integration of Rational Functions by Partial Fractions",
+    "text": "7.4 Integration of Rational Functions by Partial Fractions\nTo integrate \\(f(x) = \\dfrac{P(x)}{Q(x)}\\):\nStep 0 — Improper fraction: if \\(\\deg P \\ge \\deg Q\\), use long division: \\[\\frac{P(x)}{Q(x)} = S(x) + \\frac{R(x)}{Q(x)},\\qquad \\deg R &lt; \\deg Q\\]\nStep 1 — Factor \\(Q(x)\\) into linear factors \\((ax+b)\\) and irreducible quadratic factors \\((ax^2+bx+c)\\) with \\(b^2 - 4ac &lt; 0\\).\nStep 2 — Decompose according to the cases:\n\n\n\n\n\n\n\n\nCase\nFactor in \\(Q(x)\\)\nPartial fraction terms\n\n\n\n\nI\ndistinct linear factors \\((a_1x+b_1)\\cdots(a_kx+b_k)\\)\n\\(\\dfrac{A_1}{a_1x+b_1} + \\cdots + \\dfrac{A_k}{a_kx+b_k}\\)\n\n\nII\nrepeated linear factor \\((ax+b)^r\\)\n\\(\\dfrac{A_1}{ax+b} + \\dfrac{A_2}{(ax+b)^2} + \\cdots + \\dfrac{A_r}{(ax+b)^r}\\)\n\n\nIII\ndistinct irreducible quadratic \\(ax^2+bx+c\\)\n\\(\\dfrac{Ax+B}{ax^2+bx+c}\\)\n\n\nIV\nrepeated irreducible quadratic \\((ax^2+bx+c)^r\\)\n\\(\\dfrac{A_1x+B_1}{ax^2+bx+c} + \\cdots + \\dfrac{A_rx+B_r}{(ax^2+bx+c)^r}\\)\n\n\n\nStep 3 — Solve for the constants (multiply through by \\(Q(x)\\); equate coefficients or plug in convenient \\(x\\)-values).\nStep 4 — Integrate each term. Key formulas: \\[\\int \\frac{dx}{ax+b} = \\frac{1}{a}\\ln\\lvert ax+b\\rvert + C,\\qquad \\int \\frac{dx}{x^2+a^2} = \\frac{1}{a}\\tan^{-1}\\!\\left(\\frac{x}{a}\\right) + C\\]\nRationalizing substitutions: if the integrand contains \\(\\sqrt[n]{g(x)}\\), try \\(u = \\sqrt[n]{g(x)}\\) to obtain a rational function.",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "Integration Rules"
+    ]
+  },
+  {
+    "objectID": "integration_table.html#strategy-for-integration",
+    "href": "integration_table.html#strategy-for-integration",
+    "title": "Techniques of Integration — Rules and Formulas",
+    "section": "7.5 Strategy for Integration",
+    "text": "7.5 Strategy for Integration\n\nSimplify the integrand if possible (algebra or trig identities). e.g. \\(\\int \\sqrt{x}(1+\\sqrt{x})\\,dx = \\int (\\sqrt{x} + x)\\,dx\\), \\(\\ \\int \\frac{\\tan\\theta}{\\sec^2\\theta}\\,d\\theta = \\int \\sin\\theta\\cos\\theta\\,d\\theta\\).\nLook for an obvious substitution \\(u = g(x)\\) where \\(du = g'(x)\\,dx\\) also appears (up to a constant).\nClassify the integrand by form:\n\n\nTrigonometric functions → §7.2 strategies\n\n\nRational functions → partial fractions (§7.4)\n\n\nProducts of different kinds of functions → integration by parts (§7.1)\n\n\nRadicals:\n\n\n\\(\\sqrt{\\pm x^2 \\pm a^2}\\) → trig substitution (§7.3)\n\\(\\sqrt[n]{ax+b}\\) → rationalizing substitution \\(u = \\sqrt[n]{ax+b}\\)\n\n\nTry again:\n\n\nTry a different substitution.\n\n\nTry integration by parts again (e.g. single functions like \\(\\tan^{-1}x\\), \\(\\ln x\\)).\n\n\nManipulate the integrand: rationalize, multiply by a clever form of 1, use identities.\n\n\nRelate to previous problems.\n\n\nUse several methods together.\n\n\n\nNote: some continuous functions have no elementary antiderivative, e.g. \\[\\int e^{x^2}dx,\\quad \\int \\frac{e^x}{x}dx,\\quad \\int \\sin(x^2)\\,dx,\\quad \\int \\frac{1}{\\ln x}dx,\\quad \\int \\sqrt{x^3+1}\\,dx,\\quad \\int \\frac{\\sin x}{x}dx\\]",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "Integration Rules"
+    ]
+  },
+  {
+    "objectID": "integration_table.html#integration-using-tables-and-computer-algebra-systems",
+    "href": "integration_table.html#integration-using-tables-and-computer-algebra-systems",
+    "title": "Techniques of Integration — Rules and Formulas",
+    "section": "7.6 Integration Using Tables and Computer Algebra Systems",
+    "text": "7.6 Integration Using Tables and Computer Algebra Systems\n\nMatch the integrand to an entry in a table of integrals (Stewart’s Reference Pages), possibly after a substitution or completing the square.\nA CAS (e.g. SymPy, Mathematica) may give an answer in a different but equivalent form; it may omit absolute values or the constant \\(C\\).",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "Integration Rules"
+    ]
+  },
+  {
+    "objectID": "integration_table.html#approximate-integration",
+    "href": "integration_table.html#approximate-integration",
+    "title": "Techniques of Integration — Rules and Formulas",
+    "section": "7.7 Approximate Integration",
+    "text": "7.7 Approximate Integration\nDivide \\([a, b]\\) into \\(n\\) subintervals of width \\(\\Delta x = \\dfrac{b-a}{n}\\), with \\(x_i = a + i\\,\\Delta x\\) and midpoints \\(\\bar{x}_i = \\tfrac12(x_{i-1} + x_i)\\).\nLeft / Right endpoint rules \\[L_n = \\sum_{i=1}^{n} f(x_{i-1})\\,\\Delta x,\\qquad R_n = \\sum_{i=1}^{n} f(x_i)\\,\\Delta x\\]\nMidpoint Rule \\[\\int_a^b f(x)\\,dx \\approx M_n = \\Delta x\\left[f(\\bar{x}_1) + f(\\bar{x}_2) + \\cdots + f(\\bar{x}_n)\\right]\\]\nTrapezoidal Rule \\[\\int_a^b f(x)\\,dx \\approx T_n = \\frac{\\Delta x}{2}\\left[f(x_0) + 2f(x_1) + 2f(x_2) + \\cdots + 2f(x_{n-1}) + f(x_n)\\right]\\]\nSimpson’s Rule (\\(n\\) even) \\[\\int_a^b f(x)\\,dx \\approx S_n = \\frac{\\Delta x}{3}\\left[f(x_0) + 4f(x_1) + 2f(x_2) + 4f(x_3) + \\cdots + 2f(x_{n-2}) + 4f(x_{n-1}) + f(x_n)\\right]\\]\nAlso: \\(S_{2n} = \\tfrac13 T_n + \\tfrac23 M_n\\).\nError bounds If \\(\\lvert f''(x)\\rvert \\le K\\) on \\([a,b]\\): \\[\\lvert E_T\\rvert \\le \\frac{K(b-a)^3}{12n^2},\\qquad \\lvert E_M\\rvert \\le \\frac{K(b-a)^3}{24n^2}\\] If \\(\\lvert f^{(4)}(x)\\rvert \\le K\\) on \\([a,b]\\): \\[\\lvert E_S\\rvert \\le \\frac{K(b-a)^5}{180n^4}\\]",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "Integration Rules"
+    ]
+  },
+  {
+    "objectID": "integration_table.html#improper-integrals",
+    "href": "integration_table.html#improper-integrals",
+    "title": "Techniques of Integration — Rules and Formulas",
+    "section": "7.8 Improper Integrals",
+    "text": "7.8 Improper Integrals\n\nType 1: Infinite intervals\n\nIf \\(\\int_a^t f(x)\\,dx\\) exists for every \\(t \\ge a\\): \\[\\int_a^\\infty f(x)\\,dx = \\lim_{t\\to\\infty}\\int_a^t f(x)\\,dx\\]\nIf \\(\\int_t^b f(x)\\,dx\\) exists for every \\(t \\le b\\): \\[\\int_{-\\infty}^b f(x)\\,dx = \\lim_{t\\to-\\infty}\\int_t^b f(x)\\,dx\\] The integral is convergent if the limit exists (finite) and divergent otherwise.\nIf both \\(\\int_{-\\infty}^a f\\,dx\\) and \\(\\int_a^\\infty f\\,dx\\) converge (for any \\(a\\)): \\[\\int_{-\\infty}^\\infty f(x)\\,dx = \\int_{-\\infty}^a f(x)\\,dx + \\int_a^\\infty f(x)\\,dx\\]\n\n\\(p\\)-integral: \\[\\int_1^\\infty \\frac{1}{x^p}\\,dx \\text{ is convergent if } p &gt; 1 \\text{ and divergent if } p \\le 1\\]\n\n\nType 2: Discontinuous integrands\n\nIf \\(f\\) is continuous on \\([a, b)\\) and discontinuous at \\(b\\): \\[\\int_a^b f(x)\\,dx = \\lim_{t\\to b^-}\\int_a^t f(x)\\,dx\\]\nIf \\(f\\) is continuous on \\((a, b]\\) and discontinuous at \\(a\\): \\[\\int_a^b f(x)\\,dx = \\lim_{t\\to a^+}\\int_t^b f(x)\\,dx\\]\nIf \\(f\\) has a discontinuity at \\(c\\), \\(a &lt; c &lt; b\\), and both pieces converge: \\[\\int_a^b f(x)\\,dx = \\int_a^c f(x)\\,dx + \\int_c^b f(x)\\,dx\\]\n\nAlso: \\(\\displaystyle\\int_0^1 \\frac{1}{x^p}\\,dx\\) converges if \\(p &lt; 1\\) and diverges if \\(p \\ge 1\\).\n\n\nComparison Test\nSuppose \\(f\\) and \\(g\\) are continuous with \\(f(x) \\ge g(x) \\ge 0\\) for \\(x \\ge a\\). - (a) If \\(\\int_a^\\infty f(x)\\,dx\\) is convergent, then \\(\\int_a^\\infty g(x)\\,dx\\) is convergent. - (b) If \\(\\int_a^\\infty g(x)\\,dx\\) is divergent, then \\(\\int_a^\\infty f(x)\\,dx\\) is divergent.",
+    "crumbs": [
+      "Chapter 7: Techniques of Integration",
+      "Integration Rules"
+    ]
+  },
+  {
+    "objectID": "index.html",
+    "href": "index.html",
+    "title": "Calculus II",
+    "section": "",
+    "text": "Lecture notes and worked examples based on Stewart’s Calculus, with SymPy and NumPy.",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
+    "objectID": "index.html#chapter-7-techniques-of-integration",
+    "href": "index.html#chapter-7-techniques-of-integration",
+    "title": "Calculus II",
+    "section": "Chapter 7: Techniques of Integration",
+    "text": "Chapter 7: Techniques of Integration\n\nIntegration Rules and Formulas\n7.1 Integration by Parts\n7.2 Trigonometric Integrals",
+    "crumbs": [
+      "Home"
+    ]
+  },
+  {
     "objectID": "integration_by_parts.html",
     "href": "integration_by_parts.html",
     "title": "Lecture Notes: Integration by Parts",
@@ -140,136 +358,6 @@
     "crumbs": [
       "Chapter 7: Techniques of Integration",
       "7.1 Integration by Parts"
-    ]
-  },
-  {
-    "objectID": "index.html",
-    "href": "index.html",
-    "title": "Calculus II",
-    "section": "",
-    "text": "Lecture notes and worked examples based on Stewart’s Calculus, with SymPy and NumPy.",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "index.html#chapter-7-techniques-of-integration",
-    "href": "index.html#chapter-7-techniques-of-integration",
-    "title": "Calculus II",
-    "section": "Chapter 7: Techniques of Integration",
-    "text": "Chapter 7: Techniques of Integration\n\nIntegration Rules and Formulas\n7.1 Integration by Parts",
-    "crumbs": [
-      "Home"
-    ]
-  },
-  {
-    "objectID": "integration_table.html",
-    "href": "integration_table.html",
-    "title": "Techniques of Integration — Rules and Formulas",
-    "section": "",
-    "text": "Based on Stewart, Calculus, Chapter 7: Techniques of Integration\nThroughout, \\(C\\) is an arbitrary constant and \\(a \\neq 0\\).",
-    "crumbs": [
-      "Chapter 7: Techniques of Integration",
-      "Integration Rules"
-    ]
-  },
-  {
-    "objectID": "integration_table.html#table-of-integration-formulas-stewart-7.5",
-    "href": "integration_table.html#table-of-integration-formulas-stewart-7.5",
-    "title": "Techniques of Integration — Rules and Formulas",
-    "section": "Table of Integration Formulas (Stewart, §7.5)",
-    "text": "Table of Integration Formulas (Stewart, §7.5)\n\n\n\n\n\n\n\n#\nIntegral\n\n\n\n\n1\n\\(\\displaystyle\\int x^n\\,dx = \\frac{x^{n+1}}{n+1} + C \\quad (n \\neq -1)\\)\n\n\n2\n\\(\\displaystyle\\int \\frac{1}{x}\\,dx = \\ln\\lvert x\\rvert + C\\)\n\n\n3\n\\(\\displaystyle\\int e^x\\,dx = e^x + C\\)\n\n\n4\n\\(\\displaystyle\\int b^x\\,dx = \\frac{b^x}{\\ln b} + C\\)\n\n\n5\n\\(\\displaystyle\\int \\sin x\\,dx = -\\cos x + C\\)\n\n\n6\n\\(\\displaystyle\\int \\cos x\\,dx = \\sin x + C\\)\n\n\n7\n\\(\\displaystyle\\int \\sec^2 x\\,dx = \\tan x + C\\)\n\n\n8\n\\(\\displaystyle\\int \\csc^2 x\\,dx = -\\cot x + C\\)\n\n\n9\n\\(\\displaystyle\\int \\sec x\\tan x\\,dx = \\sec x + C\\)\n\n\n10\n\\(\\displaystyle\\int \\csc x\\cot x\\,dx = -\\csc x + C\\)\n\n\n11\n\\(\\displaystyle\\int \\sec x\\,dx = \\ln\\lvert\\sec x + \\tan x\\rvert + C\\)\n\n\n12\n\\(\\displaystyle\\int \\csc x\\,dx = \\ln\\lvert\\csc x - \\cot x\\rvert + C\\)\n\n\n13\n\\(\\displaystyle\\int \\tan x\\,dx = \\ln\\lvert\\sec x\\rvert + C\\)\n\n\n14\n\\(\\displaystyle\\int \\cot x\\,dx = \\ln\\lvert\\sin x\\rvert + C\\)\n\n\n15\n\\(\\displaystyle\\int \\sinh x\\,dx = \\cosh x + C\\)\n\n\n16\n\\(\\displaystyle\\int \\cosh x\\,dx = \\sinh x + C\\)\n\n\n17\n\\(\\displaystyle\\int \\frac{dx}{x^2 + a^2} = \\frac{1}{a}\\tan^{-1}\\!\\left(\\frac{x}{a}\\right) + C\\)\n\n\n18\n\\(\\displaystyle\\int \\frac{dx}{\\sqrt{a^2 - x^2}} = \\sin^{-1}\\!\\left(\\frac{x}{a}\\right) + C,\\ a&gt;0\\)\n\n\n19\n\\(\\displaystyle\\int \\frac{dx}{x^2 - a^2} = \\frac{1}{2a}\\ln\\left\\lvert\\frac{x-a}{x+a}\\right\\rvert + C\\)\n\n\n20\n\\(\\displaystyle\\int \\frac{dx}{\\sqrt{x^2 \\pm a^2}} = \\ln\\left\\lvert x + \\sqrt{x^2 \\pm a^2}\\right\\rvert + C\\)",
-    "crumbs": [
-      "Chapter 7: Techniques of Integration",
-      "Integration Rules"
-    ]
-  },
-  {
-    "objectID": "integration_table.html#integration-by-parts",
-    "href": "integration_table.html#integration-by-parts",
-    "title": "Techniques of Integration — Rules and Formulas",
-    "section": "7.1 Integration by Parts",
-    "text": "7.1 Integration by Parts\nDerived from the Product Rule \\(\\dfrac{d}{dx}[f(x)g(x)] = f(x)g'(x) + g(x)f'(x)\\).\nIndefinite form \\[\\int f(x)\\,g'(x)\\,dx = f(x)\\,g(x) - \\int g(x)\\,f'(x)\\,dx\\]\nShorthand (with \\(u = f(x)\\), \\(v = g(x)\\)): \\[\\boxed{\\int u\\,dv = uv - \\int v\\,du}\\]\nDefinite form \\[\\int_a^b f(x)\\,g'(x)\\,dx = f(x)\\,g(x)\\Big|_a^b - \\int_a^b g(x)\\,f'(x)\\,dx\\]\nChoosing \\(u\\) (LIATE heuristic): pick \\(u\\) as the first type in the list Logarithmic → Inverse trig → Algebraic → Trigonometric → Exponential, and let \\(dv\\) be the rest. Goal: \\(\\int v\\,du\\) should be simpler than the original.\nTips - Repeated parts: e.g. \\(\\int x^2 e^x\\,dx\\) — apply twice. - “Cyclic” integrals such as \\(\\int e^x \\sin x\\,dx\\): apply parts twice, then solve algebraically for the original integral. - Reduction formulas, e.g. \\[\\int \\sin^n x\\,dx = -\\frac{1}{n}\\cos x\\,\\sin^{n-1}x + \\frac{n-1}{n}\\int \\sin^{n-2}x\\,dx\\]\nExample: \\(\\displaystyle\\int x\\sin x\\,dx\\), \\(u=x\\), \\(dv=\\sin x\\,dx \\Rightarrow du=dx\\), \\(v=-\\cos x\\): \\[\\int x\\sin x\\,dx = -x\\cos x + \\int\\cos x\\,dx = -x\\cos x + \\sin x + C\\]",
-    "crumbs": [
-      "Chapter 7: Techniques of Integration",
-      "Integration Rules"
-    ]
-  },
-  {
-    "objectID": "integration_table.html#trigonometric-integrals",
-    "href": "integration_table.html#trigonometric-integrals",
-    "title": "Techniques of Integration — Rules and Formulas",
-    "section": "7.2 Trigonometric Integrals",
-    "text": "7.2 Trigonometric Integrals\n\nUseful identities\n\\[\\sin^2 x + \\cos^2 x = 1,\\qquad \\tan^2 x + 1 = \\sec^2 x\\] \\[\\sin^2 x = \\tfrac12(1 - \\cos 2x),\\qquad \\cos^2 x = \\tfrac12(1 + \\cos 2x),\\qquad \\sin x\\cos x = \\tfrac12\\sin 2x\\]\n\n\nStrategy for \\(\\displaystyle\\int \\sin^m x\\,\\cos^n x\\,dx\\)\n\n\n\n\n\n\n\nCase\nStrategy\n\n\n\n\n(a) power of cosine is odd (\\(n = 2k+1\\))\nSave one \\(\\cos x\\), write \\(\\cos^{2k}x = (1-\\sin^2 x)^k\\), substitute \\(u = \\sin x\\)\n\n\n(b) power of sine is odd (\\(m = 2k+1\\))\nSave one \\(\\sin x\\), write \\(\\sin^{2k}x = (1-\\cos^2 x)^k\\), substitute \\(u = \\cos x\\)\n\n\n(c) both even\nUse half-angle identities \\(\\sin^2 x = \\tfrac12(1-\\cos 2x)\\), \\(\\cos^2 x = \\tfrac12(1+\\cos 2x)\\)\n\n\n\n(If both are odd, either (a) or (b) works.)\n\n\nStrategy for \\(\\displaystyle\\int \\tan^m x\\,\\sec^n x\\,dx\\)\n\n\n\n\n\n\n\nCase\nStrategy\n\n\n\n\n(a) power of secant is even (\\(n = 2k,\\ k\\ge2\\))\nSave \\(\\sec^2 x\\), write the rest via \\(\\sec^2 x = 1+\\tan^2 x\\), substitute \\(u = \\tan x\\)\n\n\n(b) power of tangent is odd (\\(m = 2k+1\\))\nSave \\(\\sec x\\tan x\\), write the rest via \\(\\tan^2 x = \\sec^2 x - 1\\), substitute \\(u = \\sec x\\)\n\n\nOther cases\nUse identities, integration by parts, and \\(\\int\\tan x\\,dx\\), \\(\\int\\sec x\\,dx\\)\n\n\n\nUseful results: \\[\\int \\tan x\\,dx = \\ln\\lvert\\sec x\\rvert + C,\\qquad \\int \\sec x\\,dx = \\ln\\lvert\\sec x + \\tan x\\rvert + C\\] \\[\\int \\sec^3 x\\,dx = \\tfrac12\\left(\\sec x\\tan x + \\ln\\lvert\\sec x + \\tan x\\rvert\\right) + C\\]\n(Integrals of \\(\\cot^m x\\,\\csc^n x\\) are handled the same way using \\(1 + \\cot^2 x = \\csc^2 x\\).)\n\n\nProducts of sines and cosines with different angles\nFor \\(\\int \\sin mx\\cos nx\\,dx\\), \\(\\int \\sin mx\\sin nx\\,dx\\), \\(\\int \\cos mx\\cos nx\\,dx\\) use: \\[\\sin A\\cos B = \\tfrac12\\left[\\sin(A-B) + \\sin(A+B)\\right]\\] \\[\\sin A\\sin B = \\tfrac12\\left[\\cos(A-B) - \\cos(A+B)\\right]\\] \\[\\cos A\\cos B = \\tfrac12\\left[\\cos(A-B) + \\cos(A+B)\\right]\\]",
-    "crumbs": [
-      "Chapter 7: Techniques of Integration",
-      "Integration Rules"
-    ]
-  },
-  {
-    "objectID": "integration_table.html#trigonometric-substitution",
-    "href": "integration_table.html#trigonometric-substitution",
-    "title": "Techniques of Integration — Rules and Formulas",
-    "section": "7.3 Trigonometric Substitution",
-    "text": "7.3 Trigonometric Substitution\nUsed for integrands containing \\(\\sqrt{a^2 - x^2}\\), \\(\\sqrt{a^2 + x^2}\\), or \\(\\sqrt{x^2 - a^2}\\) (with \\(a &gt; 0\\)).\n\n\n\n\n\n\n\n\n\nExpression\nSubstitution\nIdentity used\nRestriction on \\(\\theta\\)\n\n\n\n\n\\(\\sqrt{a^2 - x^2}\\)\n\\(x = a\\sin\\theta\\)\n\\(1 - \\sin^2\\theta = \\cos^2\\theta\\)\n\\(-\\tfrac{\\pi}{2} \\le \\theta \\le \\tfrac{\\pi}{2}\\)\n\n\n\\(\\sqrt{a^2 + x^2}\\)\n\\(x = a\\tan\\theta\\)\n\\(1 + \\tan^2\\theta = \\sec^2\\theta\\)\n\\(-\\tfrac{\\pi}{2} &lt; \\theta &lt; \\tfrac{\\pi}{2}\\)\n\n\n\\(\\sqrt{x^2 - a^2}\\)\n\\(x = a\\sec\\theta\\)\n\\(\\sec^2\\theta - 1 = \\tan^2\\theta\\)\n\\(0 \\le \\theta &lt; \\tfrac{\\pi}{2}\\) or \\(\\pi \\le \\theta &lt; \\tfrac{3\\pi}{2}\\)\n\n\n\nSteps 1. Substitute \\(x\\) and \\(dx\\) (e.g. \\(x = a\\sin\\theta \\Rightarrow dx = a\\cos\\theta\\,d\\theta\\)). 2. Simplify the radical with the identity, e.g. \\(\\sqrt{a^2 - a^2\\sin^2\\theta} = a\\cos\\theta\\). 3. Integrate in \\(\\theta\\). 4. Return to \\(x\\) using a reference right triangle (e.g. \\(\\sin\\theta = x/a\\) gives opposite \\(x\\), hypotenuse \\(a\\), adjacent \\(\\sqrt{a^2-x^2}\\)). 5. For definite integrals, change the limits to \\(\\theta\\)-values instead.\nTip: for \\(\\sqrt{ax^2 + bx + c}\\), first complete the square, then use a trig substitution.",
-    "crumbs": [
-      "Chapter 7: Techniques of Integration",
-      "Integration Rules"
-    ]
-  },
-  {
-    "objectID": "integration_table.html#integration-of-rational-functions-by-partial-fractions",
-    "href": "integration_table.html#integration-of-rational-functions-by-partial-fractions",
-    "title": "Techniques of Integration — Rules and Formulas",
-    "section": "7.4 Integration of Rational Functions by Partial Fractions",
-    "text": "7.4 Integration of Rational Functions by Partial Fractions\nTo integrate \\(f(x) = \\dfrac{P(x)}{Q(x)}\\):\nStep 0 — Improper fraction: if \\(\\deg P \\ge \\deg Q\\), use long division: \\[\\frac{P(x)}{Q(x)} = S(x) + \\frac{R(x)}{Q(x)},\\qquad \\deg R &lt; \\deg Q\\]\nStep 1 — Factor \\(Q(x)\\) into linear factors \\((ax+b)\\) and irreducible quadratic factors \\((ax^2+bx+c)\\) with \\(b^2 - 4ac &lt; 0\\).\nStep 2 — Decompose according to the cases:\n\n\n\n\n\n\n\n\nCase\nFactor in \\(Q(x)\\)\nPartial fraction terms\n\n\n\n\nI\ndistinct linear factors \\((a_1x+b_1)\\cdots(a_kx+b_k)\\)\n\\(\\dfrac{A_1}{a_1x+b_1} + \\cdots + \\dfrac{A_k}{a_kx+b_k}\\)\n\n\nII\nrepeated linear factor \\((ax+b)^r\\)\n\\(\\dfrac{A_1}{ax+b} + \\dfrac{A_2}{(ax+b)^2} + \\cdots + \\dfrac{A_r}{(ax+b)^r}\\)\n\n\nIII\ndistinct irreducible quadratic \\(ax^2+bx+c\\)\n\\(\\dfrac{Ax+B}{ax^2+bx+c}\\)\n\n\nIV\nrepeated irreducible quadratic \\((ax^2+bx+c)^r\\)\n\\(\\dfrac{A_1x+B_1}{ax^2+bx+c} + \\cdots + \\dfrac{A_rx+B_r}{(ax^2+bx+c)^r}\\)\n\n\n\nStep 3 — Solve for the constants (multiply through by \\(Q(x)\\); equate coefficients or plug in convenient \\(x\\)-values).\nStep 4 — Integrate each term. Key formulas: \\[\\int \\frac{dx}{ax+b} = \\frac{1}{a}\\ln\\lvert ax+b\\rvert + C,\\qquad \\int \\frac{dx}{x^2+a^2} = \\frac{1}{a}\\tan^{-1}\\!\\left(\\frac{x}{a}\\right) + C\\]\nRationalizing substitutions: if the integrand contains \\(\\sqrt[n]{g(x)}\\), try \\(u = \\sqrt[n]{g(x)}\\) to obtain a rational function.",
-    "crumbs": [
-      "Chapter 7: Techniques of Integration",
-      "Integration Rules"
-    ]
-  },
-  {
-    "objectID": "integration_table.html#strategy-for-integration",
-    "href": "integration_table.html#strategy-for-integration",
-    "title": "Techniques of Integration — Rules and Formulas",
-    "section": "7.5 Strategy for Integration",
-    "text": "7.5 Strategy for Integration\n\nSimplify the integrand if possible (algebra or trig identities). e.g. \\(\\int \\sqrt{x}(1+\\sqrt{x})\\,dx = \\int (\\sqrt{x} + x)\\,dx\\), \\(\\ \\int \\frac{\\tan\\theta}{\\sec^2\\theta}\\,d\\theta = \\int \\sin\\theta\\cos\\theta\\,d\\theta\\).\nLook for an obvious substitution \\(u = g(x)\\) where \\(du = g'(x)\\,dx\\) also appears (up to a constant).\nClassify the integrand by form:\n\n\nTrigonometric functions → §7.2 strategies\n\n\nRational functions → partial fractions (§7.4)\n\n\nProducts of different kinds of functions → integration by parts (§7.1)\n\n\nRadicals:\n\n\n\\(\\sqrt{\\pm x^2 \\pm a^2}\\) → trig substitution (§7.3)\n\\(\\sqrt[n]{ax+b}\\) → rationalizing substitution \\(u = \\sqrt[n]{ax+b}\\)\n\n\nTry again:\n\n\nTry a different substitution.\n\n\nTry integration by parts again (e.g. single functions like \\(\\tan^{-1}x\\), \\(\\ln x\\)).\n\n\nManipulate the integrand: rationalize, multiply by a clever form of 1, use identities.\n\n\nRelate to previous problems.\n\n\nUse several methods together.\n\n\n\nNote: some continuous functions have no elementary antiderivative, e.g. \\[\\int e^{x^2}dx,\\quad \\int \\frac{e^x}{x}dx,\\quad \\int \\sin(x^2)\\,dx,\\quad \\int \\frac{1}{\\ln x}dx,\\quad \\int \\sqrt{x^3+1}\\,dx,\\quad \\int \\frac{\\sin x}{x}dx\\]",
-    "crumbs": [
-      "Chapter 7: Techniques of Integration",
-      "Integration Rules"
-    ]
-  },
-  {
-    "objectID": "integration_table.html#integration-using-tables-and-computer-algebra-systems",
-    "href": "integration_table.html#integration-using-tables-and-computer-algebra-systems",
-    "title": "Techniques of Integration — Rules and Formulas",
-    "section": "7.6 Integration Using Tables and Computer Algebra Systems",
-    "text": "7.6 Integration Using Tables and Computer Algebra Systems\n\nMatch the integrand to an entry in a table of integrals (Stewart’s Reference Pages), possibly after a substitution or completing the square.\nA CAS (e.g. SymPy, Mathematica) may give an answer in a different but equivalent form; it may omit absolute values or the constant \\(C\\).",
-    "crumbs": [
-      "Chapter 7: Techniques of Integration",
-      "Integration Rules"
-    ]
-  },
-  {
-    "objectID": "integration_table.html#approximate-integration",
-    "href": "integration_table.html#approximate-integration",
-    "title": "Techniques of Integration — Rules and Formulas",
-    "section": "7.7 Approximate Integration",
-    "text": "7.7 Approximate Integration\nDivide \\([a, b]\\) into \\(n\\) subintervals of width \\(\\Delta x = \\dfrac{b-a}{n}\\), with \\(x_i = a + i\\,\\Delta x\\) and midpoints \\(\\bar{x}_i = \\tfrac12(x_{i-1} + x_i)\\).\nLeft / Right endpoint rules \\[L_n = \\sum_{i=1}^{n} f(x_{i-1})\\,\\Delta x,\\qquad R_n = \\sum_{i=1}^{n} f(x_i)\\,\\Delta x\\]\nMidpoint Rule \\[\\int_a^b f(x)\\,dx \\approx M_n = \\Delta x\\left[f(\\bar{x}_1) + f(\\bar{x}_2) + \\cdots + f(\\bar{x}_n)\\right]\\]\nTrapezoidal Rule \\[\\int_a^b f(x)\\,dx \\approx T_n = \\frac{\\Delta x}{2}\\left[f(x_0) + 2f(x_1) + 2f(x_2) + \\cdots + 2f(x_{n-1}) + f(x_n)\\right]\\]\nSimpson’s Rule (\\(n\\) even) \\[\\int_a^b f(x)\\,dx \\approx S_n = \\frac{\\Delta x}{3}\\left[f(x_0) + 4f(x_1) + 2f(x_2) + 4f(x_3) + \\cdots + 2f(x_{n-2}) + 4f(x_{n-1}) + f(x_n)\\right]\\]\nAlso: \\(S_{2n} = \\tfrac13 T_n + \\tfrac23 M_n\\).\nError bounds If \\(\\lvert f''(x)\\rvert \\le K\\) on \\([a,b]\\): \\[\\lvert E_T\\rvert \\le \\frac{K(b-a)^3}{12n^2},\\qquad \\lvert E_M\\rvert \\le \\frac{K(b-a)^3}{24n^2}\\] If \\(\\lvert f^{(4)}(x)\\rvert \\le K\\) on \\([a,b]\\): \\[\\lvert E_S\\rvert \\le \\frac{K(b-a)^5}{180n^4}\\]",
-    "crumbs": [
-      "Chapter 7: Techniques of Integration",
-      "Integration Rules"
-    ]
-  },
-  {
-    "objectID": "integration_table.html#improper-integrals",
-    "href": "integration_table.html#improper-integrals",
-    "title": "Techniques of Integration — Rules and Formulas",
-    "section": "7.8 Improper Integrals",
-    "text": "7.8 Improper Integrals\n\nType 1: Infinite intervals\n\nIf \\(\\int_a^t f(x)\\,dx\\) exists for every \\(t \\ge a\\): \\[\\int_a^\\infty f(x)\\,dx = \\lim_{t\\to\\infty}\\int_a^t f(x)\\,dx\\]\nIf \\(\\int_t^b f(x)\\,dx\\) exists for every \\(t \\le b\\): \\[\\int_{-\\infty}^b f(x)\\,dx = \\lim_{t\\to-\\infty}\\int_t^b f(x)\\,dx\\] The integral is convergent if the limit exists (finite) and divergent otherwise.\nIf both \\(\\int_{-\\infty}^a f\\,dx\\) and \\(\\int_a^\\infty f\\,dx\\) converge (for any \\(a\\)): \\[\\int_{-\\infty}^\\infty f(x)\\,dx = \\int_{-\\infty}^a f(x)\\,dx + \\int_a^\\infty f(x)\\,dx\\]\n\n\\(p\\)-integral: \\[\\int_1^\\infty \\frac{1}{x^p}\\,dx \\text{ is convergent if } p &gt; 1 \\text{ and divergent if } p \\le 1\\]\n\n\nType 2: Discontinuous integrands\n\nIf \\(f\\) is continuous on \\([a, b)\\) and discontinuous at \\(b\\): \\[\\int_a^b f(x)\\,dx = \\lim_{t\\to b^-}\\int_a^t f(x)\\,dx\\]\nIf \\(f\\) is continuous on \\((a, b]\\) and discontinuous at \\(a\\): \\[\\int_a^b f(x)\\,dx = \\lim_{t\\to a^+}\\int_t^b f(x)\\,dx\\]\nIf \\(f\\) has a discontinuity at \\(c\\), \\(a &lt; c &lt; b\\), and both pieces converge: \\[\\int_a^b f(x)\\,dx = \\int_a^c f(x)\\,dx + \\int_c^b f(x)\\,dx\\]\n\nAlso: \\(\\displaystyle\\int_0^1 \\frac{1}{x^p}\\,dx\\) converges if \\(p &lt; 1\\) and diverges if \\(p \\ge 1\\).\n\n\nComparison Test\nSuppose \\(f\\) and \\(g\\) are continuous with \\(f(x) \\ge g(x) \\ge 0\\) for \\(x \\ge a\\). - (a) If \\(\\int_a^\\infty f(x)\\,dx\\) is convergent, then \\(\\int_a^\\infty g(x)\\,dx\\) is convergent. - (b) If \\(\\int_a^\\infty g(x)\\,dx\\) is divergent, then \\(\\int_a^\\infty f(x)\\,dx\\) is divergent.",
-    "crumbs": [
-      "Chapter 7: Techniques of Integration",
-      "Integration Rules"
     ]
   }
 ]
