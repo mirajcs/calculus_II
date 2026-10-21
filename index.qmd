@@ -9,3 +9,4 @@ Lecture notes and worked examples based on Stewart's *Calculus*, with SymPy and 
 - [Integration Rules and Formulas](integration_table.ipynb)
 - [7.1 Integration by Parts](integration_by_parts.ipynb)
 - [7.2 Trigonometric Integrals](trigonometric_integrals.ipynb)
+- [7.3 Trigonometric Substitution](trigonometric_substitution.ipynb)

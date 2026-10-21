@@ -6,6 +6,7 @@ project:
     - integration_table.ipynb
     - integration_by_parts.ipynb
     - trigonometric_integrals.ipynb
+    - trigonometric_substitution.ipynb
 
 website:
   title: "Calculus II"
@@ -21,6 +22,8 @@ website:
             text: "7.1 Integration by Parts"
           - href: trigonometric_integrals.ipynb
             text: "7.2 Trigonometric Integrals"
+          - href: trigonometric_substitution.ipynb
+            text: "7.3 Trigonometric Substitution"
   sidebar:
     style: docked
     contents:
@@ -34,6 +37,8 @@ website:
             text: "7.1 Integration by Parts"
           - href: trigonometric_integrals.ipynb
             text: "7.2 Trigonometric Integrals"
+          - href: trigonometric_substitution.ipynb
+            text: "7.3 Trigonometric Substitution"
 
 format:
   html:
