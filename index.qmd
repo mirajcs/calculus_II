@@ -10,3 +10,4 @@ Lecture notes and worked examples based on Stewart's *Calculus*, with SymPy and 
 - [7.1 Integration by Parts](integration_by_parts.ipynb)
 - [7.2 Trigonometric Integrals](trigonometric_integrals.ipynb)
 - [7.3 Trigonometric Substitution](trigonometric_substitution.ipynb)
+- [7.4 Partial Fractions](partial_fractions.ipynb)

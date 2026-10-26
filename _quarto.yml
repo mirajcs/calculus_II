@@ -7,6 +7,7 @@ project:
     - integration_by_parts.ipynb
     - trigonometric_integrals.ipynb
     - trigonometric_substitution.ipynb
+    - partial_fractions.ipynb
 
 website:
   title: "Calculus II"
@@ -24,6 +25,8 @@ website:
             text: "7.2 Trigonometric Integrals"
           - href: trigonometric_substitution.ipynb
             text: "7.3 Trigonometric Substitution"
+          - href: partial_fractions.ipynb
+            text: "7.4 Partial Fractions"
   sidebar:
     style: docked
     contents:
@@ -39,6 +42,8 @@ website:
             text: "7.2 Trigonometric Integrals"
           - href: trigonometric_substitution.ipynb
             text: "7.3 Trigonometric Substitution"
+          - href: partial_fractions.ipynb
+            text: "7.4 Partial Fractions"
 
 format:
   html:
